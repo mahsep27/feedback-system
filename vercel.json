@@ -9,10 +9,5 @@
             "src": "/api/feedback",
             "dest": "/api/feedback.js"
         }
-    ],
-    "env": {
-        "AIRTABLE_API_KEY": "@airtable-api-key",
-        "AIRTABLE_BASE_ID": "@airtable-base-id",
-        "AIRTABLE_FEEDBACK_TABLE": "Feedback"
-    }
+    ]
 }
