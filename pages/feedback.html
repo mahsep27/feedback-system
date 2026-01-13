@@ -22,7 +22,7 @@
             --star-inactive: #cbd5e1;
         }
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 20px; }
-        .container { max-width: 560px; margin: 0 auto; }
+        .container { max-width: 640px; margin: 0 auto; }
         .header { text-align: center; margin-bottom: 32px; padding-top: 20px; }
         .logo { font-size: 24px; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
         .header h1 { font-size: 22px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
@@ -34,9 +34,9 @@
         .rating-group { margin-bottom: 24px; }
         .rating-group:last-child { margin-bottom: 0; }
         .rating-label { font-size: 15px; color: var(--text); margin-bottom: 10px; display: block; font-weight: 500; }
-        .stars { display: flex; gap: 6px; flex-direction: row-reverse; justify-content: flex-end; }
+        .stars { display: flex; gap: 12px; flex-direction: row-reverse; justify-content: flex-end; }
         .stars input { display: none; }
-        .stars label { cursor: pointer; font-size: 36px; color: var(--star-inactive); transition: color 0.15s ease, transform 0.15s ease; line-height: 1; }
+        .stars label { cursor: pointer; font-size: 40px; color: var(--star-inactive); transition: color 0.15s ease, transform 0.15s ease; line-height: 1; }
         .stars label:hover, .stars label:hover ~ label, .stars input:checked ~ label { color: var(--star-active); }
         .stars label:hover { transform: scale(1.15); }
         .stars label::before { content: '★'; }
@@ -55,9 +55,9 @@
         .select-selected::after { content: ''; width: 10px; height: 10px; border-right: 2px solid var(--text-muted); border-bottom: 2px solid var(--text-muted); transform: rotate(45deg); transition: transform 0.2s ease; margin-left: 10px; flex-shrink: 0; }
         .select-selected.active::after { transform: rotate(-135deg); margin-top: 5px; }
         .select-selected .placeholder { color: var(--text-muted); }
-        .select-selected .selected-text { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
-        .select-selected .selected-emoji { font-size: 18px; flex-shrink: 0; }
-        .select-selected .selected-label { color: var(--text); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .select-selected .selected-text { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
+        .select-selected .selected-emoji { font-size: 20px; flex-shrink: 0; }
+        .select-selected .selected-label { color: var(--text); font-weight: 500; font-size: 14px; line-height: 1.4; }
         .select-items { position: absolute; top: 100%; left: 0; right: 0; background: white; border: 2px solid var(--primary); border-top: none; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; z-index: 100; display: none; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
         .select-items.show { display: block; }
         .select-item { padding: 14px 16px; cursor: pointer; display: flex; align-items: flex-start; gap: 10px; transition: background 0.15s ease; border-bottom: 1px solid var(--border); }
@@ -98,7 +98,7 @@
         .loading .submit-btn::after { content: ''; position: absolute; width: 20px; height: 20px; border: 2px solid white; border-top-color: transparent; border-radius: 50%; animation: spin 0.8s linear infinite; left: 50%; top: 50%; transform: translate(-50%, -50%); }
         .form-state { display: none; }
         .form-state.active { display: block; }
-        @media (max-width: 480px) { .card { padding: 24px 20px; } .stars label { font-size: 32px; } .recommend-option { min-width: calc(50% - 6px); } }
+        @media (max-width: 480px) { .card { padding: 24px 20px; } .stars label { font-size: 36px; } .stars { gap: 8px; } .recommend-option { min-width: calc(50% - 6px); } }
     </style>
 </head>
 <body>
@@ -228,6 +228,11 @@
                                         <span class="item-emoji">👎</span>
                                         <span class="item-text">Poor – Not satisfied with the tutor or service</span>
                                     </div>
+                                    <div class="select-item" data-value="Very Poor">
+                                        <span class="item-number">5</span>
+                                        <span class="item-emoji">😡</span>
+                                        <span class="item-text">Very Poor – Extremely dissatisfied with the experience</span>
+                                    </div>
                                 </div>
                             </div>
                             <input type="hidden" name="service" id="serviceInput" value="">
@@ -353,7 +358,13 @@
             });
         });
 
-        const serviceOptions = { 'Excellent': '🌟', 'Good': '👍', 'Average': '😐', 'Poor': '👎' };
+        const serviceOptions = { 
+            'Excellent': { emoji: '🌟', text: 'Excellent – Very professional and satisfied with the tutor and service' },
+            'Good': { emoji: '👍', text: 'Good – Satisfied, but there\'s some room for improvement' },
+            'Average': { emoji: '😐', text: 'Average – It was okay, not great or poor' },
+            'Poor': { emoji: '👎', text: 'Poor – Not satisfied with the tutor or service' },
+            'Very Poor': { emoji: '😡', text: 'Very Poor – Extremely dissatisfied with the experience' }
+        };
 
         selectSelected.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -364,8 +375,9 @@
         document.querySelectorAll('.select-item').forEach(item => {
             item.addEventListener('click', () => {
                 const value = item.dataset.value;
+                const option = serviceOptions[value];
                 serviceInput.value = value;
-                selectSelected.innerHTML = `<div class="selected-text"><span class="selected-emoji">${serviceOptions[value]}</span><span class="selected-label">${value}</span></div>`;
+                selectSelected.innerHTML = `<div class="selected-text"><span class="selected-emoji">${option.emoji}</span><span class="selected-label">${option.text}</span></div>`;
                 document.querySelectorAll('.select-item').forEach(i => i.classList.remove('selected'));
                 item.classList.add('selected');
                 selectSelected.classList.remove('active');
