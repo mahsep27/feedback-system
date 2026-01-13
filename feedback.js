@@ -1,119 +1,145 @@
 // /api/feedback.js
-// Vercel Serverless Function to handle feedback submission
+// GET: Fetch feedback record details (type, status)
+// POST: Update feedback record with form data
 
 export default async function handler(req, res) {
-    // Enable CORS
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-    // Handle preflight
     if (req.method === 'OPTIONS') {
         return res.status(200).end();
     }
 
-    // Only allow POST
-    if (req.method !== 'POST') {
-        return res.status(405).json({ error: 'Method not allowed' });
+    const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY;
+    const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID;
+    const AIRTABLE_TABLE_NAME = process.env.AIRTABLE_FEEDBACK_TABLE || 'Feedback';
+
+    if (!AIRTABLE_API_KEY || !AIRTABLE_BASE_ID) {
+        return res.status(500).json({ error: 'Server configuration error' });
     }
 
-    try {
-        const {
-            tutor_id,
-            tuition_id,
-            type,
-            email,
-            punctuality,
-            teaching_quality,
-            communication,
-            subject_knowledge,
-            service_satisfaction,
-            would_recommend,
-            comments,
-            suggestions
-        } = req.body;
+    // GET: Fetch feedback record by Feedback ID (auto-number)
+    if (req.method === 'GET') {
+        const { id } = req.query;
 
-        // Validate required fields
-        if (!tutor_id || !tuition_id) {
-            return res.status(400).json({ error: 'Missing tutor_id or tuition_id' });
+        if (!id) {
+            return res.status(400).json({ error: 'Missing feedback ID' });
         }
 
-        if (!email) {
-            return res.status(400).json({ error: 'Email is required' });
-        }
+        try {
+            // Search for record by Feedback ID field
+            const filterFormula = `{Feedback ID} = ${id}`;
+            const url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE_NAME)}?filterByFormula=${encodeURIComponent(filterFormula)}`;
 
-        if (!punctuality || !teaching_quality || !communication || !subject_knowledge || !service_satisfaction || !would_recommend) {
-            return res.status(400).json({ error: 'Please complete all rating fields' });
-        }
-
-        // Airtable configuration
-        const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY;
-        const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID;
-        const AIRTABLE_TABLE_NAME = process.env.AIRTABLE_FEEDBACK_TABLE || 'Feedback';
-
-        if (!AIRTABLE_API_KEY || !AIRTABLE_BASE_ID) {
-            console.error('Missing Airtable configuration');
-            return res.status(500).json({ error: 'Server configuration error' });
-        }
-
-        // Map service satisfaction value to label
-        const serviceLabels = {
-            '4': 'Excellent',
-            '3': 'Good',
-            '2': 'Average',
-            '1': 'Poor'
-        };
-
-        // Build Airtable record
-        const airtableRecord = {
-            fields: {
-                "Tutor ID": tutor_id,
-                "Tuition ID": tuition_id,
-                "Type": type || "tuition",  // demo or tuition
-                "Email": email,
-                "Punctuality": parseInt(punctuality),
-                "Teaching Quality": parseInt(teaching_quality),
-                "Communication": parseInt(communication),
-                "Subject Knowledge": parseInt(subject_knowledge),
-                "Service Satisfaction": serviceLabels[service_satisfaction] || service_satisfaction,
-                "Would Recommend": would_recommend,
-                "Comments": comments || "",
-                "Suggestions": suggestions || "",
-                "Submitted At": new Date().toISOString()
-            }
-        };
-
-        // Send to Airtable
-        const airtableUrl = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE_NAME)}`;
-
-        const airtableResponse = await fetch(airtableUrl, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${AIRTABLE_API_KEY}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(airtableRecord)
-        });
-
-        const airtableResult = await airtableResponse.json();
-
-        if (!airtableResponse.ok) {
-            console.error('Airtable error:', airtableResult);
-            return res.status(500).json({ 
-                error: 'Failed to save feedback',
-                details: airtableResult.error?.message || 'Unknown error'
+            const response = await fetch(url, {
+                headers: {
+                    'Authorization': `Bearer ${AIRTABLE_API_KEY}`
+                }
             });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                console.error('Airtable error:', data);
+                return res.status(500).json({ error: 'Failed to fetch feedback record' });
+            }
+
+            if (!data.records || data.records.length === 0) {
+                return res.status(404).json({ error: 'Feedback record not found' });
+            }
+
+            const record = data.records[0];
+            
+            return res.status(200).json({
+                recordId: record.id,
+                type: record.fields['Type'] || 'tuition',
+                status: record.fields['Status'] || 'Pending'
+            });
+
+        } catch (error) {
+            console.error('Server error:', error);
+            return res.status(500).json({ error: 'Internal server error' });
         }
-
-        // Success
-        return res.status(200).json({
-            success: true,
-            message: 'Feedback submitted successfully',
-            recordId: airtableResult.id
-        });
-
-    } catch (error) {
-        console.error('Server error:', error);
-        return res.status(500).json({ error: 'Internal server error' });
     }
+
+    // POST: Update feedback record
+    if (req.method === 'POST') {
+        try {
+            const {
+                id,
+                recordId,
+                email,
+                punctuality,
+                teaching_quality,
+                communication,
+                subject_knowledge,
+                service_satisfaction,
+                would_recommend,
+                comments,
+                suggestions
+            } = req.body;
+
+            if (!recordId) {
+                return res.status(400).json({ error: 'Missing record ID' });
+            }
+
+            if (!email) {
+                return res.status(400).json({ error: 'Email is required' });
+            }
+
+            if (!punctuality || !teaching_quality || !communication || !subject_knowledge || !service_satisfaction || !would_recommend) {
+                return res.status(400).json({ error: 'Please complete all required fields' });
+            }
+
+            // Update the existing record
+            const airtableRecord = {
+                fields: {
+                    "Email": email,
+                    "Punctuality": parseInt(punctuality),
+                    "Teaching Quality": parseInt(teaching_quality),
+                    "Communication": parseInt(communication),
+                    "Subject Knowledge": parseInt(subject_knowledge),
+                    "Service Satisfaction": service_satisfaction,
+                    "Would Recommend": would_recommend,
+                    "Comments": comments || "",
+                    "Suggestions": suggestions || "",
+                    "Status": "Submitted",
+                    "Submitted At": new Date().toISOString()
+                }
+            };
+
+            const url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE_NAME)}/${recordId}`;
+
+            const response = await fetch(url, {
+                method: 'PATCH',
+                headers: {
+                    'Authorization': `Bearer ${AIRTABLE_API_KEY}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(airtableRecord)
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                console.error('Airtable error:', result);
+                return res.status(500).json({ 
+                    error: 'Failed to update feedback',
+                    details: result.error?.message || 'Unknown error'
+                });
+            }
+
+            return res.status(200).json({
+                success: true,
+                message: 'Feedback submitted successfully'
+            });
+
+        } catch (error) {
+            console.error('Server error:', error);
+            return res.status(500).json({ error: 'Internal server error' });
+        }
+    }
+
+    return res.status(405).json({ error: 'Method not allowed' });
 }
