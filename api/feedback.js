@@ -53,7 +53,7 @@ export default async function handler(req, res) {
             
             return res.status(200).json({
                 recordId: record.id,
-                type: record.fields['Type'] || 'tuition',
+                type: record.fields['Feedback Type'] || 'tuition',
                 status: record.fields['Status'] || 'Pending'
             });
 
