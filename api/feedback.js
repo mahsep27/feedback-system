@@ -13,7 +13,7 @@ export default async function handler(req, res) {
 
     const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY;
     const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID;
-    const AIRTABLE_TABLE_NAME = process.env.AIRTABLE_FEEDBACK_TABLE || 'Feedback';
+    const AIRTABLE_TABLE_NAME = process.env.AIRTABLE_FEEDBACK_TABLE;
 
     if (!AIRTABLE_API_KEY || !AIRTABLE_BASE_ID) {
         return res.status(500).json({ error: 'Server configuration error' });
