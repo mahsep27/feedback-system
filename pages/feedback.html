@@ -10,22 +10,25 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
-            --primary: #2563eb;
-            --primary-dark: #1d4ed8;
+            --primary: #5D2E46;
+            --primary-dark: #4a2538;
+            --accent: #F7941D;
+            --accent-dark: #e8850a;
             --success: #10b981;
-            --bg: #f8fafc;
+            --bg: #faf8f9;
             --card: #ffffff;
             --text: #1e293b;
             --text-muted: #64748b;
             --border: #e2e8f0;
-            --star-active: #fbbf24;
-            --star-inactive: #cbd5e1;
+            --star-active: #F7941D;
+            --star-inactive: #d4c5cb;
         }
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 20px; }
         .container { max-width: 640px; margin: 0 auto; }
         .header { text-align: center; margin-bottom: 32px; padding-top: 20px; }
-        .logo { font-size: 24px; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
-        .header h1 { font-size: 22px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+        .logo { margin-bottom: 16px; }
+        .logo img { height: 80px; width: auto; }
+        .header h1 { font-size: 22px; font-weight: 600; color: var(--primary); margin-bottom: 8px; }
         .header p { color: var(--text-muted); font-size: 15px; }
         .card { background: var(--card); border-radius: 16px; padding: 32px; box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 10px 40px rgba(0,0,0,0.05); }
         .form-section { margin-bottom: 28px; }
@@ -42,46 +45,46 @@
         .stars label::before { content: '★'; }
         .rating-value { font-size: 13px; color: var(--text-muted); margin-top: 6px; min-height: 18px; }
         textarea { width: 100%; min-height: 100px; padding: 14px 16px; border: 2px solid var(--border); border-radius: 10px; font-family: inherit; font-size: 15px; resize: vertical; transition: border-color 0.2s ease, box-shadow 0.2s ease; }
-        textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
+        textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(247, 148, 29, 0.15); }
         textarea::placeholder { color: var(--text-muted); }
         input[type="email"] { width: 100%; padding: 14px 16px; border: 2px solid var(--border); border-radius: 10px; font-family: inherit; font-size: 15px; transition: border-color 0.2s ease, box-shadow 0.2s ease; }
-        input[type="email"]:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
+        input[type="email"]:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(247, 148, 29, 0.15); }
         input[type="email"]::placeholder { color: var(--text-muted); }
         .dropdown-group { margin-bottom: 20px; }
         .custom-select { position: relative; width: 100%; }
         .select-selected { padding: 14px 16px; border: 2px solid var(--border); border-radius: 10px; cursor: pointer; background: white; display: flex; align-items: center; justify-content: space-between; transition: border-color 0.2s ease, box-shadow 0.2s ease; }
-        .select-selected:hover { border-color: var(--primary); }
-        .select-selected.active { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+        .select-selected:hover { border-color: var(--accent); }
+        .select-selected.active { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(247, 148, 29, 0.15); border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
         .select-selected::after { content: ''; width: 10px; height: 10px; border-right: 2px solid var(--text-muted); border-bottom: 2px solid var(--text-muted); transform: rotate(45deg); transition: transform 0.2s ease; margin-left: 10px; flex-shrink: 0; }
         .select-selected.active::after { transform: rotate(-135deg); margin-top: 5px; }
         .select-selected .placeholder { color: var(--text-muted); }
         .select-selected .selected-text { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
         .select-selected .selected-emoji { font-size: 20px; flex-shrink: 0; }
         .select-selected .selected-label { color: var(--text); font-weight: 500; font-size: 14px; line-height: 1.4; }
-        .select-items { position: absolute; top: 100%; left: 0; right: 0; background: white; border: 2px solid var(--primary); border-top: none; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; z-index: 100; display: none; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .select-items { position: absolute; top: 100%; left: 0; right: 0; background: white; border: 2px solid var(--accent); border-top: none; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; z-index: 100; display: none; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
         .select-items.show { display: block; }
         .select-item { padding: 14px 16px; cursor: pointer; display: flex; align-items: flex-start; gap: 10px; transition: background 0.15s ease; border-bottom: 1px solid var(--border); }
         .select-item:last-child { border-bottom: none; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; }
         .select-item:hover { background: #f1f5f9; }
-        .select-item.selected { background: rgba(37, 99, 235, 0.05); }
-        .item-number { background: var(--primary); color: white; width: 22px; height: 22px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; flex-shrink: 0; }
+        .select-item.selected { background: rgba(247, 148, 29, 0.08); }
+        .item-number { background: var(--accent); color: white; width: 22px; height: 22px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; flex-shrink: 0; }
         .item-emoji { font-size: 18px; flex-shrink: 0; }
         .item-text { font-size: 14px; color: var(--text); line-height: 1.4; }
         .recommend-options { display: flex; gap: 12px; flex-wrap: wrap; }
         .recommend-option { flex: 1; min-width: 100px; }
         .recommend-option input { display: none; }
         .recommend-option label { display: block; padding: 14px 20px; text-align: center; border: 2px solid var(--border); border-radius: 10px; cursor: pointer; font-weight: 500; font-size: 14px; transition: all 0.2s ease; }
-        .recommend-option input:checked + label { border-color: var(--primary); background: rgba(37, 99, 235, 0.05); color: var(--primary); }
-        .recommend-option label:hover { border-color: var(--primary); }
-        .submit-btn { width: 100%; padding: 16px 24px; background: var(--primary); color: white; border: none; border-radius: 10px; font-family: inherit; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.2s ease, transform 0.1s ease; margin-top: 28px; }
-        .submit-btn:hover { background: var(--primary-dark); }
+        .recommend-option input:checked + label { border-color: var(--accent); background: rgba(247, 148, 29, 0.08); color: var(--accent); }
+        .recommend-option label:hover { border-color: var(--accent); }
+        .submit-btn { width: 100%; padding: 16px 24px; background: var(--accent); color: white; border: none; border-radius: 10px; font-family: inherit; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.2s ease, transform 0.1s ease; margin-top: 28px; }
+        .submit-btn:hover { background: var(--accent-dark); }
         .submit-btn:active { transform: scale(0.98); }
         .submit-btn:disabled { background: var(--text-muted); cursor: not-allowed; }
         .divider { height: 1px; background: var(--border); margin: 28px 0; }
         .success-state, .invalid-state, .submitted-state, .loading-state { display: none; text-align: center; padding: 40px 20px; }
         .success-state.active, .invalid-state.active, .submitted-state.active, .loading-state.active { display: block; }
         .success-icon, .invalid-icon, .submitted-icon { width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; }
-        .success-icon { background: var(--success); }
+        .success-icon { background: var(--accent); }
         .invalid-icon { background: #fee2e2; }
         .submitted-icon { background: #dbeafe; }
         .success-icon svg, .invalid-icon svg, .submitted-icon svg { width: 40px; height: 40px; }
@@ -90,7 +93,7 @@
         .submitted-icon svg { color: var(--primary); }
         .success-state h2, .invalid-state h2, .submitted-state h2 { font-size: 24px; margin-bottom: 12px; color: var(--text); }
         .success-state p, .invalid-state p, .submitted-state p, .loading-state p { color: var(--text-muted); font-size: 15px; }
-        .loading-spinner { width: 50px; height: 50px; border: 3px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 20px; }
+        .loading-spinner { width: 50px; height: 50px; border: 3px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 20px; }
         @keyframes spin { to { transform: rotate(360deg); } }
         .error-message { background: #fef2f2; border: 1px solid #fecaca; color: #dc2626; padding: 12px 16px; border-radius: 8px; margin-bottom: 20px; font-size: 14px; display: none; }
         .error-message.active { display: block; }
@@ -104,7 +107,9 @@
 <body>
     <div class="container">
         <div class="header">
-            <div class="logo">KEEP TUTORS</div>
+            <div class="logo">
+                <img src="https://drive.google.com/uc?export=view&id=1mBVbNODmfsoBvfAb0GfBzu3DMDU0HUjc" alt="KEEP TUTORS">
+            </div>
             <h1 id="formTitle">Feedback</h1>
             <p>We'd love to hear about your experience</p>
         </div>
