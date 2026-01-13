@@ -8,12 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
             --primary: #2563eb;
             --primary-dark: #1d4ed8;
@@ -26,524 +21,100 @@
             --star-active: #fbbf24;
             --star-inactive: #cbd5e1;
         }
-
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 560px;
-            margin: 0 auto;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 32px;
-            padding-top: 20px;
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 8px;
-        }
-
-        .header h1 {
-            font-size: 22px;
-            font-weight: 600;
-            color: var(--text);
-            margin-bottom: 8px;
-        }
-
-        .header p {
-            color: var(--text-muted);
-            font-size: 15px;
-        }
-
-        .card {
-            background: var(--card);
-            border-radius: 16px;
-            padding: 32px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 10px 40px rgba(0,0,0,0.05);
-        }
-
-        .form-section {
-            margin-bottom: 28px;
-        }
-
-        .form-section:last-of-type {
-            margin-bottom: 0;
-        }
-
-        .section-title {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text);
-            margin-bottom: 16px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .rating-group {
-            margin-bottom: 24px;
-        }
-
-        .rating-group:last-child {
-            margin-bottom: 0;
-        }
-
-        .rating-label {
-            font-size: 15px;
-            color: var(--text);
-            margin-bottom: 10px;
-            display: block;
-            font-weight: 500;
-        }
-
-        .stars {
-            display: flex;
-            gap: 6px;
-            flex-direction: row-reverse;
-            justify-content: flex-end;
-        }
-
-        .stars input {
-            display: none;
-        }
-
-        .stars label {
-            cursor: pointer;
-            font-size: 36px;
-            color: var(--star-inactive);
-            transition: color 0.15s ease, transform 0.15s ease;
-            line-height: 1;
-        }
-
-        .stars label:hover,
-        .stars label:hover ~ label,
-        .stars input:checked ~ label {
-            color: var(--star-active);
-        }
-
-        .stars label:hover {
-            transform: scale(1.15);
-        }
-
-        .stars label::before {
-            content: '★';
-        }
-
-        /* Star rating value display */
-        .rating-value {
-            font-size: 13px;
-            color: var(--text-muted);
-            margin-top: 6px;
-            min-height: 18px;
-        }
-
-        textarea {
-            width: 100%;
-            min-height: 100px;
-            padding: 14px 16px;
-            border: 2px solid var(--border);
-            border-radius: 10px;
-            font-family: inherit;
-            font-size: 15px;
-            resize: vertical;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-
-        textarea::placeholder {
-            color: var(--text-muted);
-        }
-
-        /* Email Input */
-        input[type="email"] {
-            width: 100%;
-            padding: 14px 16px;
-            border: 2px solid var(--border);
-            border-radius: 10px;
-            font-family: inherit;
-            font-size: 15px;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        input[type="email"]:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-
-        input[type="email"]::placeholder {
-            color: var(--text-muted);
-        }
-
-        /* Custom Dropdown */
-        .dropdown-group {
-            margin-bottom: 20px;
-        }
-
-        .custom-select {
-            position: relative;
-            width: 100%;
-        }
-
-        .select-selected {
-            padding: 14px 16px;
-            border: 2px solid var(--border);
-            border-radius: 10px;
-            cursor: pointer;
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .select-selected:hover {
-            border-color: var(--primary);
-        }
-
-        .select-selected.active {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-            border-bottom-left-radius: 0;
-            border-bottom-right-radius: 0;
-        }
-
-        .select-selected::after {
-            content: '';
-            width: 10px;
-            height: 10px;
-            border-right: 2px solid var(--text-muted);
-            border-bottom: 2px solid var(--text-muted);
-            transform: rotate(45deg);
-            transition: transform 0.2s ease;
-            margin-left: 10px;
-            flex-shrink: 0;
-        }
-
-        .select-selected.active::after {
-            transform: rotate(-135deg);
-            margin-top: 5px;
-        }
-
-        .select-selected .placeholder {
-            color: var(--text-muted);
-        }
-
-        .select-selected .selected-text {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex: 1;
-            min-width: 0;
-        }
-
-        .select-selected .selected-emoji {
-            font-size: 18px;
-            flex-shrink: 0;
-        }
-
-        .select-selected .selected-label {
-            color: var(--text);
-            font-weight: 500;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .select-items {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: white;
-            border: 2px solid var(--primary);
-            border-top: none;
-            border-bottom-left-radius: 10px;
-            border-bottom-right-radius: 10px;
-            z-index: 100;
-            display: none;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        }
-
-        .select-items.show {
-            display: block;
-        }
-
-        .select-item {
-            padding: 14px 16px;
-            cursor: pointer;
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            transition: background 0.15s ease;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .select-item:last-child {
-            border-bottom: none;
-            border-bottom-left-radius: 8px;
-            border-bottom-right-radius: 8px;
-        }
-
-        .select-item:hover {
-            background: #f1f5f9;
-        }
-
-        .select-item.selected {
-            background: rgba(37, 99, 235, 0.05);
-        }
-
-        .item-number {
-            background: var(--primary);
-            color: white;
-            width: 22px;
-            height: 22px;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: 600;
-            flex-shrink: 0;
-        }
-
-        .item-emoji {
-            font-size: 18px;
-            flex-shrink: 0;
-        }
-
-        .item-text {
-            font-size: 14px;
-            color: var(--text);
-            line-height: 1.4;
-        }
-
-        .recommend-options {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        .recommend-option {
-            flex: 1;
-            min-width: 100px;
-        }
-
-        .recommend-option input {
-            display: none;
-        }
-
-        .recommend-option label {
-            display: block;
-            padding: 14px 20px;
-            text-align: center;
-            border: 2px solid var(--border);
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 500;
-            font-size: 14px;
-            transition: all 0.2s ease;
-        }
-
-        .recommend-option input:checked + label {
-            border-color: var(--primary);
-            background: rgba(37, 99, 235, 0.05);
-            color: var(--primary);
-        }
-
-        .recommend-option label:hover {
-            border-color: var(--primary);
-        }
-
-        .submit-btn {
-            width: 100%;
-            padding: 16px 24px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-family: inherit;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s ease, transform 0.1s ease;
-            margin-top: 28px;
-        }
-
-        .submit-btn:hover {
-            background: var(--primary-dark);
-        }
-
-        .submit-btn:active {
-            transform: scale(0.98);
-        }
-
-        .submit-btn:disabled {
-            background: var(--text-muted);
-            cursor: not-allowed;
-        }
-
-        /* Divider */
-        .divider {
-            height: 1px;
-            background: var(--border);
-            margin: 28px 0;
-        }
-
-        /* Success State */
-        .success-state {
-            display: none;
-            text-align: center;
-            padding: 40px 20px;
-        }
-
-        .success-state.active {
-            display: block;
-        }
-
-        .success-icon {
-            width: 80px;
-            height: 80px;
-            background: var(--success);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 24px;
-        }
-
-        .success-icon svg {
-            width: 40px;
-            height: 40px;
-            color: white;
-        }
-
-        .success-state h2 {
-            font-size: 24px;
-            margin-bottom: 12px;
-            color: var(--text);
-        }
-
-        .success-state p {
-            color: var(--text-muted);
-            font-size: 15px;
-        }
-
-        /* Error State */
-        .error-message {
-            background: #fef2f2;
-            border: 1px solid #fecaca;
-            color: #dc2626;
-            padding: 12px 16px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 14px;
-            display: none;
-        }
-
-        .error-message.active {
-            display: block;
-        }
-
-        /* Loading State */
-        .loading .submit-btn {
-            position: relative;
-            color: transparent;
-        }
-
-        .loading .submit-btn::after {
-            content: '';
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            border: 2px solid white;
-            border-top-color: transparent;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        @keyframes spin {
-            to { transform: translate(-50%, -50%) rotate(360deg); }
-        }
-
-        /* Invalid Link State */
-        .invalid-state {
-            display: none;
-            text-align: center;
-            padding: 40px 20px;
-        }
-
-        .invalid-state.active {
-            display: block;
-        }
-
-        .invalid-icon {
-            width: 80px;
-            height: 80px;
-            background: #fee2e2;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 24px;
-        }
-
-        .invalid-icon svg {
-            width: 40px;
-            height: 40px;
-            color: #dc2626;
-        }
-
-        .form-state {
-            display: block;
-        }
-
-        .form-state.hidden {
-            display: none;
-        }
-
-        @media (max-width: 480px) {
-            .card {
-                padding: 24px 20px;
-            }
-
-            .stars label {
-                font-size: 32px;
-            }
-
-            .recommend-option {
-                min-width: calc(50% - 6px);
-            }
-        }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 20px; }
+        .container { max-width: 560px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 32px; padding-top: 20px; }
+        .logo { font-size: 24px; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
+        .header h1 { font-size: 22px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+        .header p { color: var(--text-muted); font-size: 15px; }
+        .card { background: var(--card); border-radius: 16px; padding: 32px; box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 10px 40px rgba(0,0,0,0.05); }
+        .form-section { margin-bottom: 28px; }
+        .form-section:last-of-type { margin-bottom: 0; }
+        .section-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .rating-group { margin-bottom: 24px; }
+        .rating-group:last-child { margin-bottom: 0; }
+        .rating-label { font-size: 15px; color: var(--text); margin-bottom: 10px; display: block; font-weight: 500; }
+        .stars { display: flex; gap: 6px; flex-direction: row-reverse; justify-content: flex-end; }
+        .stars input { display: none; }
+        .stars label { cursor: pointer; font-size: 36px; color: var(--star-inactive); transition: color 0.15s ease, transform 0.15s ease; line-height: 1; }
+        .stars label:hover, .stars label:hover ~ label, .stars input:checked ~ label { color: var(--star-active); }
+        .stars label:hover { transform: scale(1.15); }
+        .stars label::before { content: '★'; }
+        .rating-value { font-size: 13px; color: var(--text-muted); margin-top: 6px; min-height: 18px; }
+        textarea { width: 100%; min-height: 100px; padding: 14px 16px; border: 2px solid var(--border); border-radius: 10px; font-family: inherit; font-size: 15px; resize: vertical; transition: border-color 0.2s ease, box-shadow 0.2s ease; }
+        textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
+        textarea::placeholder { color: var(--text-muted); }
+        input[type="email"] { width: 100%; padding: 14px 16px; border: 2px solid var(--border); border-radius: 10px; font-family: inherit; font-size: 15px; transition: border-color 0.2s ease, box-shadow 0.2s ease; }
+        input[type="email"]:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
+        input[type="email"]::placeholder { color: var(--text-muted); }
+        .dropdown-group { margin-bottom: 20px; }
+        .custom-select { position: relative; width: 100%; }
+        .select-selected { padding: 14px 16px; border: 2px solid var(--border); border-radius: 10px; cursor: pointer; background: white; display: flex; align-items: center; justify-content: space-between; transition: border-color 0.2s ease, box-shadow 0.2s ease; }
+        .select-selected:hover { border-color: var(--primary); }
+        .select-selected.active { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+        .select-selected::after { content: ''; width: 10px; height: 10px; border-right: 2px solid var(--text-muted); border-bottom: 2px solid var(--text-muted); transform: rotate(45deg); transition: transform 0.2s ease; margin-left: 10px; flex-shrink: 0; }
+        .select-selected.active::after { transform: rotate(-135deg); margin-top: 5px; }
+        .select-selected .placeholder { color: var(--text-muted); }
+        .select-selected .selected-text { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
+        .select-selected .selected-emoji { font-size: 18px; flex-shrink: 0; }
+        .select-selected .selected-label { color: var(--text); font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .select-items { position: absolute; top: 100%; left: 0; right: 0; background: white; border: 2px solid var(--primary); border-top: none; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; z-index: 100; display: none; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .select-items.show { display: block; }
+        .select-item { padding: 14px 16px; cursor: pointer; display: flex; align-items: flex-start; gap: 10px; transition: background 0.15s ease; border-bottom: 1px solid var(--border); }
+        .select-item:last-child { border-bottom: none; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; }
+        .select-item:hover { background: #f1f5f9; }
+        .select-item.selected { background: rgba(37, 99, 235, 0.05); }
+        .item-number { background: var(--primary); color: white; width: 22px; height: 22px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; flex-shrink: 0; }
+        .item-emoji { font-size: 18px; flex-shrink: 0; }
+        .item-text { font-size: 14px; color: var(--text); line-height: 1.4; }
+        .recommend-options { display: flex; gap: 12px; flex-wrap: wrap; }
+        .recommend-option { flex: 1; min-width: 100px; }
+        .recommend-option input { display: none; }
+        .recommend-option label { display: block; padding: 14px 20px; text-align: center; border: 2px solid var(--border); border-radius: 10px; cursor: pointer; font-weight: 500; font-size: 14px; transition: all 0.2s ease; }
+        .recommend-option input:checked + label { border-color: var(--primary); background: rgba(37, 99, 235, 0.05); color: var(--primary); }
+        .recommend-option label:hover { border-color: var(--primary); }
+        .submit-btn { width: 100%; padding: 16px 24px; background: var(--primary); color: white; border: none; border-radius: 10px; font-family: inherit; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.2s ease, transform 0.1s ease; margin-top: 28px; }
+        .submit-btn:hover { background: var(--primary-dark); }
+        .submit-btn:active { transform: scale(0.98); }
+        .submit-btn:disabled { background: var(--text-muted); cursor: not-allowed; }
+        .divider { height: 1px; background: var(--border); margin: 28px 0; }
+        .success-state, .invalid-state, .submitted-state, .loading-state { display: none; text-align: center; padding: 40px 20px; }
+        .success-state.active, .invalid-state.active, .submitted-state.active, .loading-state.active { display: block; }
+        .success-icon, .invalid-icon, .submitted-icon { width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; }
+        .success-icon { background: var(--success); }
+        .invalid-icon { background: #fee2e2; }
+        .submitted-icon { background: #dbeafe; }
+        .success-icon svg, .invalid-icon svg, .submitted-icon svg { width: 40px; height: 40px; }
+        .success-icon svg { color: white; }
+        .invalid-icon svg { color: #dc2626; }
+        .submitted-icon svg { color: var(--primary); }
+        .success-state h2, .invalid-state h2, .submitted-state h2 { font-size: 24px; margin-bottom: 12px; color: var(--text); }
+        .success-state p, .invalid-state p, .submitted-state p, .loading-state p { color: var(--text-muted); font-size: 15px; }
+        .loading-spinner { width: 50px; height: 50px; border: 3px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 20px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .error-message { background: #fef2f2; border: 1px solid #fecaca; color: #dc2626; padding: 12px 16px; border-radius: 8px; margin-bottom: 20px; font-size: 14px; display: none; }
+        .error-message.active { display: block; }
+        .loading .submit-btn { position: relative; color: transparent; }
+        .loading .submit-btn::after { content: ''; position: absolute; width: 20px; height: 20px; border: 2px solid white; border-top-color: transparent; border-radius: 50%; animation: spin 0.8s linear infinite; left: 50%; top: 50%; transform: translate(-50%, -50%); }
+        .form-state { display: none; }
+        .form-state.active { display: block; }
+        @media (max-width: 480px) { .card { padding: 24px 20px; } .stars label { font-size: 32px; } .recommend-option { min-width: calc(50% - 6px); } }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
             <div class="logo">KEEP TUTORS</div>
-            <h1 id="formTitle">Tuition Feedback</h1>
+            <h1 id="formTitle">Feedback</h1>
             <p>We'd love to hear about your experience</p>
         </div>
 
         <div class="card">
-            <!-- Invalid Link State -->
+            <div class="loading-state active" id="loadingState">
+                <div class="loading-spinner"></div>
+                <p>Loading feedback form...</p>
+            </div>
+
             <div class="invalid-state" id="invalidState">
                 <div class="invalid-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -551,90 +122,76 @@
                     </svg>
                 </div>
                 <h2>Invalid Link</h2>
-                <p>This feedback link appears to be invalid or incomplete. Please use the link sent to you via WhatsApp.</p>
+                <p id="invalidMessage">This feedback link appears to be invalid. Please use the link sent to you via WhatsApp.</p>
             </div>
 
-            <!-- Form State -->
+            <div class="submitted-state" id="submittedState">
+                <div class="submitted-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <h2>Already Submitted</h2>
+                <p>You have already submitted feedback for this session. Thank you!</p>
+            </div>
+
             <div class="form-state" id="formState">
                 <div class="error-message" id="errorMessage"></div>
-
                 <form id="feedbackForm">
-                    <!-- Email Section -->
                     <div class="form-section">
                         <div class="section-title">Your Email</div>
-                        <input type="email" name="email" id="emailInput" placeholder="Enter your email address" required>
+                        <input type="email" name="email" placeholder="Enter your email address" required>
                     </div>
 
                     <div class="divider"></div>
 
-                    <!-- Tutor Rating Section -->
                     <div class="form-section">
                         <div class="section-title" id="tutorSectionTitle">Rate the Tutor</div>
 
                         <div class="rating-group">
                             <label class="rating-label">Punctuality</label>
-                            <div class="stars" data-rating="punctuality">
-                                <input type="radio" name="punctuality" value="5" id="punctuality5">
-                                <label for="punctuality5" title="Excellent"></label>
-                                <input type="radio" name="punctuality" value="4" id="punctuality4">
-                                <label for="punctuality4" title="Very Good"></label>
-                                <input type="radio" name="punctuality" value="3" id="punctuality3">
-                                <label for="punctuality3" title="Good"></label>
-                                <input type="radio" name="punctuality" value="2" id="punctuality2">
-                                <label for="punctuality2" title="Fair"></label>
-                                <input type="radio" name="punctuality" value="1" id="punctuality1">
-                                <label for="punctuality1" title="Poor"></label>
+                            <div class="stars">
+                                <input type="radio" name="punctuality" value="5" id="p5"><label for="p5"></label>
+                                <input type="radio" name="punctuality" value="4" id="p4"><label for="p4"></label>
+                                <input type="radio" name="punctuality" value="3" id="p3"><label for="p3"></label>
+                                <input type="radio" name="punctuality" value="2" id="p2"><label for="p2"></label>
+                                <input type="radio" name="punctuality" value="1" id="p1"><label for="p1"></label>
                             </div>
                             <div class="rating-value" id="punctuality-value"></div>
                         </div>
 
                         <div class="rating-group">
                             <label class="rating-label">Teaching Quality</label>
-                            <div class="stars" data-rating="teaching">
-                                <input type="radio" name="teaching" value="5" id="teaching5">
-                                <label for="teaching5" title="Excellent"></label>
-                                <input type="radio" name="teaching" value="4" id="teaching4">
-                                <label for="teaching4" title="Very Good"></label>
-                                <input type="radio" name="teaching" value="3" id="teaching3">
-                                <label for="teaching3" title="Good"></label>
-                                <input type="radio" name="teaching" value="2" id="teaching2">
-                                <label for="teaching2" title="Fair"></label>
-                                <input type="radio" name="teaching" value="1" id="teaching1">
-                                <label for="teaching1" title="Poor"></label>
+                            <div class="stars">
+                                <input type="radio" name="teaching" value="5" id="t5"><label for="t5"></label>
+                                <input type="radio" name="teaching" value="4" id="t4"><label for="t4"></label>
+                                <input type="radio" name="teaching" value="3" id="t3"><label for="t3"></label>
+                                <input type="radio" name="teaching" value="2" id="t2"><label for="t2"></label>
+                                <input type="radio" name="teaching" value="1" id="t1"><label for="t1"></label>
                             </div>
                             <div class="rating-value" id="teaching-value"></div>
                         </div>
 
                         <div class="rating-group">
                             <label class="rating-label">Communication</label>
-                            <div class="stars" data-rating="communication">
-                                <input type="radio" name="communication" value="5" id="communication5">
-                                <label for="communication5" title="Excellent"></label>
-                                <input type="radio" name="communication" value="4" id="communication4">
-                                <label for="communication4" title="Very Good"></label>
-                                <input type="radio" name="communication" value="3" id="communication3">
-                                <label for="communication3" title="Good"></label>
-                                <input type="radio" name="communication" value="2" id="communication2">
-                                <label for="communication2" title="Fair"></label>
-                                <input type="radio" name="communication" value="1" id="communication1">
-                                <label for="communication1" title="Poor"></label>
+                            <div class="stars">
+                                <input type="radio" name="communication" value="5" id="c5"><label for="c5"></label>
+                                <input type="radio" name="communication" value="4" id="c4"><label for="c4"></label>
+                                <input type="radio" name="communication" value="3" id="c3"><label for="c3"></label>
+                                <input type="radio" name="communication" value="2" id="c2"><label for="c2"></label>
+                                <input type="radio" name="communication" value="1" id="c1"><label for="c1"></label>
                             </div>
                             <div class="rating-value" id="communication-value"></div>
                         </div>
 
                         <div class="rating-group">
                             <label class="rating-label">Subject Knowledge</label>
-                            <div class="stars" data-rating="knowledge">
-                                <input type="radio" name="knowledge" value="5" id="knowledge5">
-                                <label for="knowledge5" title="Excellent"></label>
-                                <input type="radio" name="knowledge" value="4" id="knowledge4">
-                                <label for="knowledge4" title="Very Good"></label>
-                                <input type="radio" name="knowledge" value="3" id="knowledge3">
-                                <label for="knowledge3" title="Good"></label>
-                                <input type="radio" name="knowledge" value="2" id="knowledge2">
-                                <label for="knowledge2" title="Fair"></label>
-                                <input type="radio" name="knowledge" value="1" id="knowledge1">
-                                <label for="knowledge1" title="Poor"></label>
+                            <div class="stars">
+                                <input type="radio" name="knowledge" value="5" id="k5"><label for="k5"></label>
+                                <input type="radio" name="knowledge" value="4" id="k4"><label for="k4"></label>
+                                <input type="radio" name="knowledge" value="3" id="k3"><label for="k3"></label>
+                                <input type="radio" name="knowledge" value="2" id="k2"><label for="k2"></label>
+                                <input type="radio" name="knowledge" value="1" id="k1"><label for="k1"></label>
                             </div>
                             <div class="rating-value" id="knowledge-value"></div>
                         </div>
@@ -642,33 +199,31 @@
 
                     <div class="divider"></div>
 
-                    <!-- KEEP TUTORS Satisfaction Section -->
                     <div class="form-section">
                         <div class="section-title">How satisfied are you with KEEP TUTORS?</div>
-
                         <div class="dropdown-group">
                             <label class="rating-label">Overall Service Experience</label>
-                            <div class="custom-select" id="serviceSelect">
+                            <div class="custom-select">
                                 <div class="select-selected" id="selectedOption">
                                     <span class="placeholder">Select your satisfaction level</span>
                                 </div>
                                 <div class="select-items" id="selectItems">
-                                    <div class="select-item" data-value="4">
+                                    <div class="select-item" data-value="Excellent">
                                         <span class="item-number">1</span>
                                         <span class="item-emoji">🌟</span>
                                         <span class="item-text">Excellent – Very professional and satisfied with the tutor and service</span>
                                     </div>
-                                    <div class="select-item" data-value="3">
+                                    <div class="select-item" data-value="Good">
                                         <span class="item-number">2</span>
                                         <span class="item-emoji">👍</span>
                                         <span class="item-text">Good – Satisfied, but there's some room for improvement</span>
                                     </div>
-                                    <div class="select-item" data-value="2">
+                                    <div class="select-item" data-value="Average">
                                         <span class="item-number">3</span>
                                         <span class="item-emoji">😐</span>
                                         <span class="item-text">Average – It was okay, not great or poor</span>
                                     </div>
-                                    <div class="select-item" data-value="1">
+                                    <div class="select-item" data-value="Poor">
                                         <span class="item-number">4</span>
                                         <span class="item-emoji">👎</span>
                                         <span class="item-text">Poor – Not satisfied with the tutor or service</span>
@@ -681,28 +236,23 @@
 
                     <div class="divider"></div>
 
-                    <!-- Recommend Section -->
                     <div class="form-section">
                         <div class="section-title">Would you recommend KEEP TUTORS?</div>
                         <div class="recommend-options">
                             <div class="recommend-option">
-                                <input type="radio" name="recommend" value="Yes" id="recommendYes">
-                                <label for="recommendYes">Yes</label>
+                                <input type="radio" name="recommend" value="Yes" id="rYes"><label for="rYes">Yes</label>
                             </div>
                             <div class="recommend-option">
-                                <input type="radio" name="recommend" value="Maybe" id="recommendMaybe">
-                                <label for="recommendMaybe">Maybe</label>
+                                <input type="radio" name="recommend" value="Maybe" id="rMaybe"><label for="rMaybe">Maybe</label>
                             </div>
                             <div class="recommend-option">
-                                <input type="radio" name="recommend" value="No" id="recommendNo">
-                                <label for="recommendNo">No</label>
+                                <input type="radio" name="recommend" value="No" id="rNo"><label for="rNo">No</label>
                             </div>
                         </div>
                     </div>
 
                     <div class="divider"></div>
 
-                    <!-- Comments Section -->
                     <div class="form-section">
                         <div class="section-title">Additional Comments</div>
                         <textarea name="comments" placeholder="Share any additional feedback about your experience..."></textarea>
@@ -717,7 +267,6 @@
                 </form>
             </div>
 
-            <!-- Success State -->
             <div class="success-state" id="successState">
                 <div class="success-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -731,69 +280,80 @@
     </div>
 
     <script>
-        // Rating labels
-        const ratingLabels = {
-            1: 'Poor',
-            2: 'Fair',
-            3: 'Good',
-            4: 'Very Good',
-            5: 'Excellent'
-        };
-
-        // Get URL parameters
+        const ratingLabels = { 1: 'Poor', 2: 'Fair', 3: 'Good', 4: 'Very Good', 5: 'Excellent' };
         const urlParams = new URLSearchParams(window.location.search);
-        const tutorId = urlParams.get('tutor_id');
-        const tuitionId = urlParams.get('tuition_id');
-        const feedbackType = urlParams.get('type') || 'tuition'; // default to tuition
+        const feedbackId = urlParams.get('id');
 
-        // DOM elements
+        const loadingState = document.getElementById('loadingState');
         const formState = document.getElementById('formState');
         const successState = document.getElementById('successState');
         const invalidState = document.getElementById('invalidState');
+        const submittedState = document.getElementById('submittedState');
+        const invalidMessage = document.getElementById('invalidMessage');
         const errorMessage = document.getElementById('errorMessage');
         const form = document.getElementById('feedbackForm');
         const formTitle = document.getElementById('formTitle');
         const tutorSectionTitle = document.getElementById('tutorSectionTitle');
+        const selectSelected = document.getElementById('selectedOption');
+        const selectItems = document.getElementById('selectItems');
+        const serviceInput = document.getElementById('serviceInput');
 
-        // Set dynamic title based on type
-        if (feedbackType === 'demo') {
-            formTitle.textContent = 'Demo Feedback';
-            tutorSectionTitle.textContent = 'Rate the Demo Session';
-            document.title = 'Demo Feedback - KEEP TUTORS';
-        } else {
-            formTitle.textContent = 'Tuition Feedback';
-            tutorSectionTitle.textContent = 'Rate the Tutor';
-            document.title = 'Tuition Feedback - KEEP TUTORS';
+        let recordId = null;
+
+        async function initPage() {
+            if (!feedbackId) {
+                showInvalidState('This feedback link appears to be invalid. Please use the link sent to you.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/feedback?id=${feedbackId}`);
+                const result = await response.json();
+
+                if (!response.ok) {
+                    showInvalidState(result.error || 'Failed to load feedback form.');
+                    return;
+                }
+
+                if (result.status === 'Submitted') {
+                    showSubmittedState();
+                    return;
+                }
+
+                recordId = result.recordId;
+                const feedbackType = result.type || 'tuition';
+                
+                if (feedbackType === 'demo') {
+                    formTitle.textContent = 'Demo Feedback';
+                    tutorSectionTitle.textContent = 'Rate the Demo Session';
+                    document.title = 'Demo Feedback - KEEP TUTORS';
+                } else {
+                    formTitle.textContent = 'Tuition Feedback';
+                    tutorSectionTitle.textContent = 'Rate the Tutor';
+                    document.title = 'Tuition Feedback - KEEP TUTORS';
+                }
+
+                showFormState();
+            } catch (error) {
+                showInvalidState('Something went wrong. Please try again later.');
+            }
         }
 
-        // Validate URL parameters
-        if (!tutorId || !tuitionId) {
-            formState.classList.add('hidden');
-            invalidState.classList.add('active');
-        }
+        function showInvalidState(msg) { loadingState.classList.remove('active'); invalidMessage.textContent = msg; invalidState.classList.add('active'); }
+        function showSubmittedState() { loadingState.classList.remove('active'); submittedState.classList.add('active'); }
+        function showFormState() { loadingState.classList.remove('active'); formState.classList.add('active'); }
+        function showError(msg) { errorMessage.textContent = msg; errorMessage.classList.add('active'); window.scrollTo({ top: 0, behavior: 'smooth' }); }
 
-        // Add rating value display on selection
         document.querySelectorAll('.stars input').forEach(input => {
             input.addEventListener('change', (e) => {
                 const name = e.target.name;
                 const value = e.target.value;
-                const valueDisplay = document.getElementById(`${name}-value`);
-                if (valueDisplay) {
-                    valueDisplay.textContent = `${value}/5 - ${ratingLabels[value]}`;
-                }
+                const el = document.getElementById(`${name}-value`);
+                if (el) el.textContent = `${value}/5 - ${ratingLabels[value]}`;
             });
         });
 
-        // Custom dropdown functionality
-        const selectSelected = document.getElementById('selectedOption');
-        const selectItems = document.getElementById('selectItems');
-        const serviceInput = document.getElementById('serviceInput');
-        const serviceOptions = {
-            '4': { emoji: '🌟', label: 'Excellent' },
-            '3': { emoji: '👍', label: 'Good' },
-            '2': { emoji: '😐', label: 'Average' },
-            '1': { emoji: '👎', label: 'Poor' }
-        };
+        const serviceOptions = { 'Excellent': '🌟', 'Good': '👍', 'Average': '😐', 'Poor': '👎' };
 
         selectSelected.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -802,51 +362,27 @@
         });
 
         document.querySelectorAll('.select-item').forEach(item => {
-            item.addEventListener('click', (e) => {
+            item.addEventListener('click', () => {
                 const value = item.dataset.value;
-                const option = serviceOptions[value];
-                
-                // Update hidden input
                 serviceInput.value = value;
-                
-                // Update selected display
-                selectSelected.innerHTML = `
-                    <div class="selected-text">
-                        <span class="selected-emoji">${option.emoji}</span>
-                        <span class="selected-label">${option.label}</span>
-                    </div>
-                `;
-                // Add back the arrow
-                selectSelected.style.cssText = '';
-                
-                // Remove selected class from all items
+                selectSelected.innerHTML = `<div class="selected-text"><span class="selected-emoji">${serviceOptions[value]}</span><span class="selected-label">${value}</span></div>`;
                 document.querySelectorAll('.select-item').forEach(i => i.classList.remove('selected'));
                 item.classList.add('selected');
-                
-                // Close dropdown
                 selectSelected.classList.remove('active');
                 selectItems.classList.remove('show');
             });
         });
 
-        // Close dropdown when clicking outside
-        document.addEventListener('click', () => {
-            selectSelected.classList.remove('active');
-            selectItems.classList.remove('show');
-        });
+        document.addEventListener('click', () => { selectSelected.classList.remove('active'); selectItems.classList.remove('show'); });
 
-        // Form submission
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-
-            // Get form data
             const formData = new FormData(form);
             const email = formData.get('email')?.trim();
-            
+
             const data = {
-                tutor_id: tutorId,
-                tuition_id: tuitionId,
-                type: feedbackType,
+                id: feedbackId,
+                recordId: recordId,
                 email: email,
                 punctuality: formData.get('punctuality'),
                 teaching_quality: formData.get('teaching'),
@@ -858,43 +394,10 @@
                 suggestions: formData.get('suggestions') || ''
             };
 
-            // Validate required fields
-            if (!email) {
-                errorMessage.textContent = 'Please enter your email address.';
-                errorMessage.classList.add('active');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-                return;
-            }
-
-            // Simple email validation
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                errorMessage.textContent = 'Please enter a valid email address.';
-                errorMessage.classList.add('active');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-                return;
-            }
-
-            if (!data.punctuality || !data.teaching_quality || !data.communication || !data.subject_knowledge) {
-                errorMessage.textContent = 'Please complete all tutor rating fields.';
-                errorMessage.classList.add('active');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-                return;
-            }
-
-            if (!data.service_satisfaction) {
-                errorMessage.textContent = 'Please select your satisfaction level with KEEP TUTORS.';
-                errorMessage.classList.add('active');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-                return;
-            }
-
-            if (!data.would_recommend) {
-                errorMessage.textContent = 'Please select whether you would recommend us.';
-                errorMessage.classList.add('active');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-                return;
-            }
+            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showError('Please enter a valid email address.'); return; }
+            if (!data.punctuality || !data.teaching_quality || !data.communication || !data.subject_knowledge) { showError('Please complete all tutor rating fields.'); return; }
+            if (!data.service_satisfaction) { showError('Please select your satisfaction level with KEEP TUTORS.'); return; }
+            if (!data.would_recommend) { showError('Please select whether you would recommend us.'); return; }
 
             errorMessage.classList.remove('active');
             form.parentElement.classList.add('loading');
@@ -903,29 +406,26 @@
             try {
                 const response = await fetch('/api/feedback', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
                 });
-
                 const result = await response.json();
 
                 if (response.ok) {
-                    formState.classList.add('hidden');
+                    formState.classList.remove('active');
                     successState.classList.add('active');
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 } else {
                     throw new Error(result.error || 'Failed to submit feedback');
                 }
             } catch (error) {
-                errorMessage.textContent = error.message || 'Something went wrong. Please try again.';
-                errorMessage.classList.add('active');
+                showError(error.message || 'Something went wrong. Please try again.');
                 form.parentElement.classList.remove('loading');
                 form.querySelector('.submit-btn').disabled = false;
-                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         });
+
+        initPage();
     </script>
 </body>
 </html>
