@@ -24,10 +24,10 @@
             --star-inactive: #d4c5cb;
         }
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 20px; }
-        .container { max-width: 640px; margin: 0 auto; }
+        .container { max-width: 720px; margin: 0 auto; }
         .header { text-align: center; margin-bottom: 32px; padding-top: 20px; }
         .logo { margin-bottom: 16px; }
-        .logo img { height: 80px; width: auto; }
+        .logo img { height: 100px; width: auto; }
         .header h1 { font-size: 22px; font-weight: 600; color: var(--primary); margin-bottom: 8px; }
         .header p { color: var(--text-muted); font-size: 15px; }
         .card { background: var(--card); border-radius: 16px; padding: 32px; box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 10px 40px rgba(0,0,0,0.05); }
@@ -37,9 +37,9 @@
         .rating-group { margin-bottom: 24px; }
         .rating-group:last-child { margin-bottom: 0; }
         .rating-label { font-size: 15px; color: var(--text); margin-bottom: 10px; display: block; font-weight: 500; }
-        .stars { display: flex; gap: 12px; flex-direction: row-reverse; justify-content: flex-end; }
+        .stars { display: flex; gap: 16px; flex-direction: row-reverse; justify-content: flex-end; }
         .stars input { display: none; }
-        .stars label { cursor: pointer; font-size: 40px; color: var(--star-inactive); transition: color 0.15s ease, transform 0.15s ease; line-height: 1; }
+        .stars label { cursor: pointer; font-size: 44px; color: var(--star-inactive); transition: color 0.15s ease, transform 0.15s ease; line-height: 1; }
         .stars label:hover, .stars label:hover ~ label, .stars input:checked ~ label { color: var(--star-active); }
         .stars label:hover { transform: scale(1.15); }
         .stars label::before { content: '★'; }
@@ -67,7 +67,7 @@
         .select-item:last-child { border-bottom: none; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; }
         .select-item:hover { background: #f1f5f9; }
         .select-item.selected { background: rgba(247, 148, 29, 0.08); }
-        .item-number { background: var(--accent); color: white; width: 22px; height: 22px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; flex-shrink: 0; }
+        .item-number { background: var(--primary); color: white; width: 22px; height: 22px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; flex-shrink: 0; }
         .item-emoji { font-size: 18px; flex-shrink: 0; }
         .item-text { font-size: 14px; color: var(--text); line-height: 1.4; }
         .recommend-options { display: flex; gap: 12px; flex-wrap: wrap; }
@@ -76,8 +76,8 @@
         .recommend-option label { display: block; padding: 14px 20px; text-align: center; border: 2px solid var(--border); border-radius: 10px; cursor: pointer; font-weight: 500; font-size: 14px; transition: all 0.2s ease; }
         .recommend-option input:checked + label { border-color: var(--accent); background: rgba(247, 148, 29, 0.08); color: var(--accent); }
         .recommend-option label:hover { border-color: var(--accent); }
-        .submit-btn { width: 100%; padding: 16px 24px; background: var(--accent); color: white; border: none; border-radius: 10px; font-family: inherit; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.2s ease, transform 0.1s ease; margin-top: 28px; }
-        .submit-btn:hover { background: var(--accent-dark); }
+        .submit-btn { width: 100%; padding: 16px 24px; background: var(--primary); color: white; border: none; border-radius: 10px; font-family: inherit; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.2s ease, transform 0.1s ease; margin-top: 28px; }
+        .submit-btn:hover { background: var(--accent); }
         .submit-btn:active { transform: scale(0.98); }
         .submit-btn:disabled { background: var(--text-muted); cursor: not-allowed; }
         .divider { height: 1px; background: var(--border); margin: 28px 0; }
