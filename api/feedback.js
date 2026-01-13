@@ -53,7 +53,7 @@ export default async function handler(req, res) {
             
             return res.status(200).json({
                 recordId: record.id,
-                type: record.fields['Feedback Type'] || 'tuition',
+                type: record.fields['Type'] || 'tuition',
                 status: record.fields['Status'] || 'Pending'
             });
 
@@ -80,6 +80,8 @@ export default async function handler(req, res) {
                 suggestions
             } = req.body;
 
+            console.log('Received data:', JSON.stringify(req.body, null, 2));
+
             if (!recordId) {
                 return res.status(400).json({ error: 'Missing record ID' });
             }
@@ -93,21 +95,24 @@ export default async function handler(req, res) {
             }
 
             // Update the existing record
+            // Note: Rating fields in Airtable expect integers (1-5 for 5-star rating)
             const airtableRecord = {
                 fields: {
                     "Email": email,
-                    "Punctuality": parseInt(punctuality),
-                    "Teaching Quality": parseInt(teaching_quality),
-                    "Communication": parseInt(communication),
-                    "Subject Knowledge": parseInt(subject_knowledge),
+                    "Punctuality": parseInt(punctuality) || null,
+                    "Teaching Quality": parseInt(teaching_quality) || null,
+                    "Communication": parseInt(communication) || null,
+                    "Subject Knowledge": parseInt(subject_knowledge) || null,
                     "Service Satisfaction": service_satisfaction,
                     "Would Recommend": would_recommend,
                     "Comments": comments || "",
                     "Suggestions": suggestions || "",
                     "Status": "Submitted",
-                    "Submitted At": new Date().toISOString()
+                    "Submitted At": new Date().toISOString().split('T')[0]
                 }
             };
+
+            console.log('Sending to Airtable:', JSON.stringify(airtableRecord, null, 2));
 
             const url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE_NAME)}/${recordId}`;
 
@@ -122,11 +127,13 @@ export default async function handler(req, res) {
 
             const result = await response.json();
 
+            console.log('Airtable response:', JSON.stringify(result, null, 2));
+
             if (!response.ok) {
                 console.error('Airtable error:', result);
                 return res.status(500).json({ 
-                    error: 'Failed to update feedback',
-                    details: result.error?.message || 'Unknown error'
+                    error: result.error?.message || 'Failed to update feedback',
+                    details: result.error
                 });
             }
 
@@ -137,7 +144,7 @@ export default async function handler(req, res) {
 
         } catch (error) {
             console.error('Server error:', error);
-            return res.status(500).json({ error: 'Internal server error' });
+            return res.status(500).json({ error: error.message || 'Internal server error' });
         }
     }
 
