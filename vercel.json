@@ -2,6 +2,10 @@
     "version": 2,
     "routes": [
         {
+            "src": "/",
+            "dest": "/pages/feedback.html"
+        },
+        {
             "src": "/feedback",
             "dest": "/pages/feedback.html"
         },
