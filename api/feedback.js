@@ -13,7 +13,7 @@ export default async function handler(req, res) {
 
     const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY;
     const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID;
-    const AIRTABLE_TABLE_NAME = process.env.AIRTABLE_FEEDBACK_TABLE;
+    const AIRTABLE_TABLE_NAME = process.env.AIRTABLE_FEEDBACK_TABLE || 'Feedback';
 
     if (!AIRTABLE_API_KEY || !AIRTABLE_BASE_ID) {
         return res.status(500).json({ error: 'Server configuration error' });
@@ -53,8 +53,8 @@ export default async function handler(req, res) {
             
             return res.status(200).json({
                 recordId: record.id,
-                type: record.fields['Feedback Type'] ,
-                status: record.fields['Status'] 
+                type: record.fields['Type'] || 'tuition',
+                status: record.fields['Status'] || 'Pending'
             });
 
         } catch (error) {
@@ -94,6 +94,15 @@ export default async function handler(req, res) {
                 return res.status(400).json({ error: 'Please complete all required fields' });
             }
 
+            // Map service satisfaction to full Airtable option text
+            const serviceSatisfactionMap = {
+                'Excellent': 'Excellent – Very professional and satisfied with the tutor and service',
+                'Good': 'Good – Satisfied, but there\'s some room for improvement',
+                'Average': 'Average – It was okay, not great or poor',
+                'Poor': 'Poor – Not satisfied with the tutor or service',
+                'Very Poor': 'Very Poor – Extremely dissatisfied with the experience'
+            };
+
             // Update the existing record
             // Note: Rating fields in Airtable expect integers (1-5 for 5-star rating)
             const airtableRecord = {
@@ -103,7 +112,7 @@ export default async function handler(req, res) {
                     "Teaching Quality": parseInt(teaching_quality) || null,
                     "Communication": parseInt(communication) || null,
                     "Subject Knowledge": parseInt(subject_knowledge) || null,
-                    "Service Satisfaction": service_satisfaction,
+                    "Service Satisfaction": serviceSatisfactionMap[service_satisfaction] || service_satisfaction,
                     "Would Recommend": would_recommend,
                     "Comments": comments || "",
                     "Suggestions": suggestions || "",
