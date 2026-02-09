@@ -136,6 +136,7 @@
             </div>
             <div class="header-text">
                 <h1 id="formTitle">Loading...</h1>
+                <p id="tutorNameDisplay" style="color: var(--primary); font-weight: 600; font-size: 16px; margin-bottom: 4px;"></p>
                 <p>We'd love to hear about your experience</p>
             </div>
         </div>
@@ -330,6 +331,7 @@
         const form = document.getElementById('feedbackForm');
         const formTitle = document.getElementById('formTitle');
         const tutorSectionTitle = document.getElementById('tutorSectionTitle');
+        const tutorNameDisplay = document.getElementById('tutorNameDisplay');
         const selectSelected = document.getElementById('selectedOption');
         const selectItems = document.getElementById('selectItems');
         const serviceInput = document.getElementById('serviceInput');
@@ -358,6 +360,12 @@
 
                 recordId = result.recordId;
                 const feedbackType = result.type;
+                const tutorName = result.tutorName;
+                
+                // Display tutor name if available
+                if (tutorName) {
+                    tutorNameDisplay.textContent = `Tutor: ${tutorName}`;
+                }
                 
                 if (feedbackType === 'Demo') {
                     formTitle.textContent = 'Demo Feedback';
