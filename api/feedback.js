@@ -1,6 +1,6 @@
 // /api/feedback.js
 // GET: Fetch feedback record details (type, status)
-// POST: Update feedback record with form data (handles both Demo and Tuition)
+// POST: Update feedback record with form data (handles both Demo and Tuition tables)
 
 export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -13,23 +13,32 @@ export default async function handler(req, res) {
 
     const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY;
     const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID;
-    const AIRTABLE_TABLE_NAME = process.env.AIRTABLE_FEEDBACK_TABLE || 'Feedback';
+    
+    // Two separate tables
+    const DEMO_TABLE = 'Demo Feedback';
+    const TUITION_TABLE = 'Tuition Feedback';
 
     if (!AIRTABLE_API_KEY || !AIRTABLE_BASE_ID) {
         return res.status(500).json({ error: 'Server configuration error' });
     }
 
-    // GET: Fetch feedback record by Feedback ID (auto-number)
+    // GET: Fetch feedback record by Feedback ID
     if (req.method === 'GET') {
-        const { id } = req.query;
+        const { id, type } = req.query;
 
         if (!id) {
             return res.status(400).json({ error: 'Missing feedback ID' });
         }
 
+        if (!type || !['demo', 'tuition'].includes(type.toLowerCase())) {
+            return res.status(400).json({ error: 'Missing or invalid type. Use type=demo or type=tuition' });
+        }
+
+        const tableName = type.toLowerCase() === 'demo' ? DEMO_TABLE : TUITION_TABLE;
+
         try {
             const filterFormula = `{Feedback ID} = ${id}`;
-            const url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE_NAME)}?filterByFormula=${encodeURIComponent(filterFormula)}`;
+            const url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(tableName)}?filterByFormula=${encodeURIComponent(filterFormula)}`;
 
             const response = await fetch(url, {
                 headers: {
@@ -52,7 +61,7 @@ export default async function handler(req, res) {
             
             return res.status(200).json({
                 recordId: record.id,
-                type: record.fields['Feedback Type'] || 'Tuition',
+                type: type.toLowerCase() === 'demo' ? 'Demo' : 'Tuition',
                 status: record.fields['Status'] || 'Pending',
                 tutorName: record.fields['Tutor Name'] || ''
             });
@@ -75,6 +84,12 @@ export default async function handler(req, res) {
                 return res.status(400).json({ error: 'Missing record ID' });
             }
 
+            if (!type) {
+                return res.status(400).json({ error: 'Missing type' });
+            }
+
+            const tableName = type === 'Demo' ? DEMO_TABLE : TUITION_TABLE;
+
             let airtableRecord = {
                 fields: {
                     "Status": "Submitted",
@@ -84,13 +99,12 @@ export default async function handler(req, res) {
 
             // Handle Demo form
             if (type === 'Demo') {
-                const { tutor_name, on_time, teaching_rating, demo_decision } = body;
+                const { on_time, teaching_rating, demo_decision } = body;
 
-                if (!tutor_name || !on_time || !teaching_rating || !demo_decision) {
+                if (!on_time || !teaching_rating || !demo_decision) {
                     return res.status(400).json({ error: 'Please complete all required fields' });
                 }
 
-                airtableRecord.fields["Tutor Name"] = tutor_name;
                 airtableRecord.fields["On Time"] = on_time;
                 airtableRecord.fields["Teaching Rating"] = parseInt(teaching_rating) || null;
                 airtableRecord.fields["Demo Decision"] = demo_decision;
@@ -140,7 +154,7 @@ export default async function handler(req, res) {
 
             console.log('Sending to Airtable:', JSON.stringify(airtableRecord, null, 2));
 
-            const url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE_NAME)}/${recordId}`;
+            const url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(tableName)}/${recordId}`;
 
             const response = await fetch(url, {
                 method: 'PATCH',
