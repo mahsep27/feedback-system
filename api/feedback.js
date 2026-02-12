@@ -1,6 +1,6 @@
 // /api/feedback.js
 // GET: Fetch feedback record details (type, status)
-// POST: Update feedback record with form data
+// POST: Update feedback record with form data (handles both Demo and Tuition)
 
 export default async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -28,7 +28,6 @@ export default async function handler(req, res) {
         }
 
         try {
-            // Search for record by Feedback ID field
             const filterFormula = `{Feedback ID} = ${id}`;
             const url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE_NAME)}?filterByFormula=${encodeURIComponent(filterFormula)}`;
 
@@ -53,7 +52,7 @@ export default async function handler(req, res) {
             
             return res.status(200).json({
                 recordId: record.id,
-                type: record.fields['Type'] || 'tuition',
+                type: record.fields['Type'] || 'Tuition',
                 status: record.fields['Status'] || 'Pending',
                 tutorName: record.fields['Tutor Name Rollup (from Applicants)'] || ''
             });
@@ -67,60 +66,77 @@ export default async function handler(req, res) {
     // POST: Update feedback record
     if (req.method === 'POST') {
         try {
-            const {
-                id,
-                recordId,
-                email,
-                punctuality,
-                teaching_quality,
-                communication,
-                subject_knowledge,
-                service_satisfaction,
-                would_recommend,
-                comments,
-                suggestions
-            } = req.body;
+            const body = req.body;
+            const { recordId, type } = body;
 
-            console.log('Received data:', JSON.stringify(req.body, null, 2));
+            console.log('Received data:', JSON.stringify(body, null, 2));
 
             if (!recordId) {
                 return res.status(400).json({ error: 'Missing record ID' });
             }
 
-            if (!email) {
-                return res.status(400).json({ error: 'Email is required' });
-            }
-
-            if (!punctuality || !teaching_quality || !communication || !subject_knowledge || !service_satisfaction || !would_recommend) {
-                return res.status(400).json({ error: 'Please complete all required fields' });
-            }
-
-            // Map service satisfaction to full Airtable option text
-            const serviceSatisfactionMap = {
-                'Excellent': 'Excellent – Very professional and satisfied with the tutor and service',
-                'Good': 'Good – Satisfied, but there\'s some room for improvement',
-                'Average': 'Average – It was okay, not great or poor',
-                'Poor': 'Poor – Not satisfied with the tutor or service',
-                'Very Poor': 'Very Poor – Extremely dissatisfied with the experience'
-            };
-
-            // Update the existing record
-            // Note: Rating fields in Airtable expect integers (1-5 for 5-star rating)
-            const airtableRecord = {
+            let airtableRecord = {
                 fields: {
-                    "Email": email,
-                    "Punctuality": parseInt(punctuality) || null,
-                    "Teaching Quality": parseInt(teaching_quality) || null,
-                    "Communication": parseInt(communication) || null,
-                    "Subject Knowledge": parseInt(subject_knowledge) || null,
-                    "Service Satisfaction": serviceSatisfactionMap[service_satisfaction] || service_satisfaction,
-                    "Would Recommend": would_recommend,
-                    "Comments": comments || "",
-                    "Suggestions": suggestions || "",
                     "Status": "Submitted",
                     "Submitted At": new Date().toISOString().split('T')[0]
                 }
             };
+
+            // Handle Demo form
+            if (type === 'Demo') {
+                const { tutor_name, on_time, teaching_rating, demo_decision } = body;
+
+                if (!tutor_name || !on_time || !teaching_rating || !demo_decision) {
+                    return res.status(400).json({ error: 'Please complete all required fields' });
+                }
+
+                airtableRecord.fields["Tutor Name"] = tutor_name;
+                airtableRecord.fields["On Time"] = on_time;
+                airtableRecord.fields["Teaching Rating"] = parseInt(teaching_rating) || null;
+                airtableRecord.fields["Demo Decision"] = demo_decision;
+
+            } 
+            // Handle Tuition form
+            else {
+                const {
+                    email,
+                    punctuality,
+                    teaching_quality,
+                    communication,
+                    subject_knowledge,
+                    service_satisfaction,
+                    would_recommend,
+                    comments,
+                    suggestions
+                } = body;
+
+                if (!email) {
+                    return res.status(400).json({ error: 'Email is required' });
+                }
+
+                if (!punctuality || !teaching_quality || !communication || !subject_knowledge || !service_satisfaction || !would_recommend) {
+                    return res.status(400).json({ error: 'Please complete all required fields' });
+                }
+
+                // Map service satisfaction to full Airtable option text
+                const serviceSatisfactionMap = {
+                    'Excellent': 'Excellent – Very professional and satisfied with the tutor and service',
+                    'Good': 'Good – Satisfied, but there\'s some room for improvement',
+                    'Average': 'Average – It was okay, not great or poor',
+                    'Poor': 'Poor – Not satisfied with the tutor or service',
+                    'Very Poor': 'Very Poor – Extremely dissatisfied with the experience'
+                };
+
+                airtableRecord.fields["Email"] = email;
+                airtableRecord.fields["Punctuality"] = parseInt(punctuality) || null;
+                airtableRecord.fields["Teaching Quality"] = parseInt(teaching_quality) || null;
+                airtableRecord.fields["Communication"] = parseInt(communication) || null;
+                airtableRecord.fields["Subject Knowledge"] = parseInt(subject_knowledge) || null;
+                airtableRecord.fields["Service Satisfaction"] = serviceSatisfactionMap[service_satisfaction] || service_satisfaction;
+                airtableRecord.fields["Would Recommend"] = would_recommend;
+                airtableRecord.fields["Comments"] = comments || "";
+                airtableRecord.fields["Suggestions"] = suggestions || "";
+            }
 
             console.log('Sending to Airtable:', JSON.stringify(airtableRecord, null, 2));
 
