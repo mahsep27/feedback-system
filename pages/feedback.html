@@ -155,7 +155,6 @@
             </div>
             <div class="header-text">
                 <h1 id="formTitle">Loading...</h1>
-                <p id="tutorNameDisplay" style="color: var(--primary); font-weight: 600; font-size: 16px; margin-bottom: 4px;"></p>
                 <p>We'd love to hear about your experience</p>
             </div>
         </div>
@@ -192,12 +191,14 @@
                     
                     <!-- ========== DEMO FORM FIELDS ========== -->
                     <div class="demo-only">
-                        <div class="form-section">
+                        <input type="hidden" name="tutor_name" id="tutorNameInput">
+                        
+                        <div class="form-section" style="display: none;">
                             <div class="section-title">Tutor/Teacher Name</div>
-                            <input type="text" name="tutor_name" id="tutorNameInput" placeholder="Enter tutor name">
+                            <div id="demoTutorDisplay" style="font-size: 18px; font-weight: 600; color: var(--primary); padding: 14px 16px; background: #f8f5f7; border-radius: 10px;"></div>
                         </div>
 
-                        <div class="divider"></div>
+                        <div class="divider demo-tutor-divider" style="display: none;"></div>
 
                         <div class="form-section">
                             <div class="section-title">Tutor/Teacher reached on time</div>
@@ -258,6 +259,13 @@
 
                     <!-- ========== TUITION FORM FIELDS ========== -->
                     <div class="tuition-only">
+                        <div class="form-section" style="display: none;">
+                            <div class="section-title">Tutor Name</div>
+                            <div id="tuitionTutorDisplay" style="font-size: 18px; font-weight: 600; color: var(--primary); padding: 14px 16px; background: #f8f5f7; border-radius: 10px;"></div>
+                        </div>
+
+                        <div class="divider tuition-tutor-divider" style="display: none;"></div>
+
                         <div class="form-section">
                             <div class="section-title">Your Email</div>
                             <input type="email" name="email" placeholder="Enter your email address">
@@ -420,7 +428,6 @@
         const form = document.getElementById('feedbackForm');
         const formTitle = document.getElementById('formTitle');
         const tutorSectionTitle = document.getElementById('tutorSectionTitle');
-        const tutorNameDisplay = document.getElementById('tutorNameDisplay');
         const tutorNameInput = document.getElementById('tutorNameInput');
         const mainCard = document.getElementById('mainCard');
         const selectSelected = document.getElementById('selectedOption');
@@ -457,22 +464,35 @@
                 // Set form type class for showing/hiding sections
                 if (feedbackType === 'Demo') {
                     mainCard.classList.add('form-type-demo');
-                    formTitle.textContent = 'Demo Tuition Feedback';
+                    formTitle.textContent = 'Demo/Trial Class Feedback';
                     document.title = 'Demo Feedback - KEEP TUTORS';
-                    // Pre-fill tutor name if available (read-only)
-                    if (tutorName && tutorNameInput) {
-                        tutorNameInput.value = Array.isArray(tutorName) ? tutorName[0] : tutorName;
-                        tutorNameInput.readOnly = true;
-                        tutorNameInput.style.backgroundColor = '#f5f5f5';
-                        tutorNameInput.style.cursor = 'not-allowed';
+                    // Set tutor name for form submission and display
+                    if (tutorName) {
+                        const name = Array.isArray(tutorName) ? tutorName[0] : tutorName;
+                        if (tutorNameInput) {
+                            tutorNameInput.value = name;
+                        }
+                        // Show tutor name display in form
+                        const demoTutorDisplay = document.getElementById('demoTutorDisplay');
+                        if (demoTutorDisplay) {
+                            demoTutorDisplay.textContent = name;
+                            demoTutorDisplay.parentElement.style.display = 'block';
+                            document.querySelector('.demo-tutor-divider').style.display = 'block';
+                        }
                     }
                 } else {
                     mainCard.classList.add('form-type-tuition');
-                    formTitle.textContent = 'Demo/Trial class Feedback';
+                    formTitle.textContent = 'Tuition Feedback';
                     document.title = 'Tuition Feedback - KEEP TUTORS';
-                    // Display tutor name if available
+                    // Show tutor name display in form
                     if (tutorName) {
-                        tutorNameDisplay.textContent = `Tutor: ${tutorName}`;
+                        const name = Array.isArray(tutorName) ? tutorName[0] : tutorName;
+                        const tuitionTutorDisplay = document.getElementById('tuitionTutorDisplay');
+                        if (tuitionTutorDisplay) {
+                            tuitionTutorDisplay.textContent = name;
+                            tuitionTutorDisplay.parentElement.style.display = 'block';
+                            document.querySelector('.tuition-tutor-divider').style.display = 'block';
+                        }
                     }
                 }
 
