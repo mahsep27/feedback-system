@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -50,9 +50,9 @@
         textarea { width: 100%; min-height: 100px; padding: 14px 16px; border: 2px solid var(--border); border-radius: 10px; font-family: inherit; font-size: 15px; resize: vertical; transition: border-color 0.2s ease, box-shadow 0.2s ease; }
         textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(247, 148, 29, 0.15); }
         textarea::placeholder { color: var(--text-muted); }
-        input[type="email"] { width: 100%; padding: 14px 16px; border: 2px solid var(--border); border-radius: 10px; font-family: inherit; font-size: 15px; transition: border-color 0.2s ease, box-shadow 0.2s ease; }
-        input[type="email"]:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(247, 148, 29, 0.15); }
-        input[type="email"]::placeholder { color: var(--text-muted); }
+        input[type="email"], input[type="text"] { width: 100%; padding: 14px 16px; border: 2px solid var(--border); border-radius: 10px; font-family: inherit; font-size: 15px; transition: border-color 0.2s ease, box-shadow 0.2s ease; }
+        input[type="email"]:focus, input[type="text"]:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(247, 148, 29, 0.15); }
+        input[type="email"]::placeholder, input[type="text"]::placeholder { color: var(--text-muted); }
         .dropdown-group { margin-bottom: 20px; }
         .custom-select { position: relative; width: 100%; }
         .select-selected { padding: 14px 16px; border: 2px solid var(--border); border-radius: 10px; cursor: pointer; background: white; display: flex; align-items: center; justify-content: space-between; transition: border-color 0.2s ease, box-shadow 0.2s ease; }
@@ -73,12 +73,24 @@
         .item-number { background: var(--primary); color: white; width: 22px; height: 22px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; flex-shrink: 0; }
         .item-emoji { font-size: 18px; flex-shrink: 0; }
         .item-text { font-size: 14px; color: var(--text); line-height: 1.4; }
-        .recommend-options { display: flex; gap: 12px; flex-wrap: wrap; }
-        .recommend-option { flex: 1; min-width: 100px; }
-        .recommend-option input { display: none; }
-        .recommend-option label { display: block; padding: 14px 20px; text-align: center; border: 2px solid var(--border); border-radius: 10px; cursor: pointer; font-weight: 500; font-size: 14px; transition: all 0.2s ease; }
-        .recommend-option input:checked + label { border-color: var(--accent); background: rgba(247, 148, 29, 0.08); color: var(--accent); }
-        .recommend-option label:hover { border-color: var(--accent); }
+        .recommend-options, .yesno-options { display: flex; gap: 12px; flex-wrap: wrap; }
+        .recommend-option, .yesno-option { flex: 1; min-width: 100px; }
+        .recommend-option input, .yesno-option input { display: none; }
+        .recommend-option label, .yesno-option label { display: block; padding: 14px 20px; text-align: center; border: 2px solid var(--border); border-radius: 10px; cursor: pointer; font-weight: 500; font-size: 14px; transition: all 0.2s ease; }
+        .recommend-option input:checked + label, .yesno-option input:checked + label { border-color: var(--accent); background: rgba(247, 148, 29, 0.08); color: var(--accent); }
+        .recommend-option label:hover, .yesno-option label:hover { border-color: var(--accent); }
+        
+        /* Checkbox options for demo form */
+        .checkbox-options { display: flex; flex-direction: column; gap: 12px; }
+        .checkbox-option { display: flex; align-items: center; gap: 12px; }
+        .checkbox-option input[type="radio"] { display: none; }
+        .checkbox-option label { display: flex; align-items: center; gap: 12px; cursor: pointer; padding: 14px 16px; border: 2px solid var(--border); border-radius: 10px; width: 100%; transition: all 0.2s ease; font-size: 14px; }
+        .checkbox-option input[type="radio"]:checked + label { border-color: var(--accent); background: rgba(247, 148, 29, 0.08); color: var(--accent); }
+        .checkbox-option label:hover { border-color: var(--accent); }
+        .checkbox-option .checkmark { width: 22px; height: 22px; border: 2px solid var(--border); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.2s ease; }
+        .checkbox-option input[type="radio"]:checked + label .checkmark { border-color: var(--accent); background: var(--accent); }
+        .checkbox-option input[type="radio"]:checked + label .checkmark::after { content: '✓'; color: white; font-size: 14px; font-weight: bold; }
+
         .submit-btn { width: 100%; padding: 16px 24px; background: var(--primary); color: white; border: none; border-radius: 10px; font-family: inherit; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.2s ease, transform 0.1s ease; margin-top: 28px; }
         .submit-btn:hover { background: var(--accent); }
         .submit-btn:active { transform: scale(0.98); }
@@ -105,12 +117,17 @@
         .form-state { display: none; }
         .form-state.active { display: block; }
         
-        /* Mobile Styles - Fixed header alignment */
+        /* Hide form sections based on type */
+        .tuition-only, .demo-only { display: none; }
+        .form-type-tuition .tuition-only { display: block; }
+        .form-type-demo .demo-only { display: block; }
+        
+        /* Mobile Styles */
         @media (max-width: 600px) { 
             .card { padding: 24px 20px; } 
             .stars label { font-size: 36px; } 
             .stars { gap: 10px; } 
-            .recommend-option { min-width: calc(50% - 6px); }  
+            .recommend-option, .yesno-option { min-width: calc(50% - 6px); }  
             .header { 
                 display: flex;
                 flex-direction: column;
@@ -143,7 +160,7 @@
             </div>
         </div>
 
-        <div class="card">
+        <div class="card" id="mainCard">
             <div class="loading-state active" id="loadingState">
                 <div class="loading-spinner"></div>
                 <p>Loading feedback form...</p>
@@ -172,134 +189,204 @@
             <div class="form-state" id="formState">
                 <div class="error-message" id="errorMessage"></div>
                 <form id="feedbackForm">
-                    <div class="form-section">
-                        <div class="section-title">Your Email</div>
-                        <input type="email" name="email" placeholder="Enter your email address" required>
-                    </div>
-
-                    <div class="divider"></div>
-
-                    <div class="form-section">
-                        <div class="section-title" id="tutorSectionTitle">Rate the Tutor</div>
-
-                        <div class="rating-group">
-                            <label class="rating-label">Punctuality</label>
-                            <div class="stars">
-                                <input type="radio" name="punctuality" value="5" id="p5"><label for="p5"></label>
-                                <input type="radio" name="punctuality" value="4" id="p4"><label for="p4"></label>
-                                <input type="radio" name="punctuality" value="3" id="p3"><label for="p3"></label>
-                                <input type="radio" name="punctuality" value="2" id="p2"><label for="p2"></label>
-                                <input type="radio" name="punctuality" value="1" id="p1"><label for="p1"></label>
-                            </div>
-                            <div class="rating-value" id="punctuality-value"></div>
+                    
+                    <!-- ========== DEMO FORM FIELDS ========== -->
+                    <div class="demo-only">
+                        <div class="form-section">
+                            <div class="section-title">Tutor/Teacher Name</div>
+                            <input type="text" name="tutor_name" id="tutorNameInput" placeholder="Enter tutor name">
                         </div>
 
-                        <div class="rating-group">
-                            <label class="rating-label">Teaching Quality</label>
-                            <div class="stars">
-                                <input type="radio" name="teaching" value="5" id="t5"><label for="t5"></label>
-                                <input type="radio" name="teaching" value="4" id="t4"><label for="t4"></label>
-                                <input type="radio" name="teaching" value="3" id="t3"><label for="t3"></label>
-                                <input type="radio" name="teaching" value="2" id="t2"><label for="t2"></label>
-                                <input type="radio" name="teaching" value="1" id="t1"><label for="t1"></label>
-                            </div>
-                            <div class="rating-value" id="teaching-value"></div>
-                        </div>
+                        <div class="divider"></div>
 
-                        <div class="rating-group">
-                            <label class="rating-label">Communication</label>
-                            <div class="stars">
-                                <input type="radio" name="communication" value="5" id="c5"><label for="c5"></label>
-                                <input type="radio" name="communication" value="4" id="c4"><label for="c4"></label>
-                                <input type="radio" name="communication" value="3" id="c3"><label for="c3"></label>
-                                <input type="radio" name="communication" value="2" id="c2"><label for="c2"></label>
-                                <input type="radio" name="communication" value="1" id="c1"><label for="c1"></label>
-                            </div>
-                            <div class="rating-value" id="communication-value"></div>
-                        </div>
-
-                        <div class="rating-group">
-                            <label class="rating-label">Subject Knowledge</label>
-                            <div class="stars">
-                                <input type="radio" name="knowledge" value="5" id="k5"><label for="k5"></label>
-                                <input type="radio" name="knowledge" value="4" id="k4"><label for="k4"></label>
-                                <input type="radio" name="knowledge" value="3" id="k3"><label for="k3"></label>
-                                <input type="radio" name="knowledge" value="2" id="k2"><label for="k2"></label>
-                                <input type="radio" name="knowledge" value="1" id="k1"><label for="k1"></label>
-                            </div>
-                            <div class="rating-value" id="knowledge-value"></div>
-                        </div>
-                    </div>
-
-                    <div class="divider"></div>
-
-                    <div class="form-section">
-                        <div class="section-title">How satisfied are you with KEEP TUTORS?</div>
-                        <div class="dropdown-group">
-                            <label class="rating-label">Overall Service Experience</label>
-                            <div class="custom-select">
-                                <div class="select-selected" id="selectedOption">
-                                    <span class="placeholder">Select your satisfaction level</span>
+                        <div class="form-section">
+                            <div class="section-title">Tutor/Teacher reached on time</div>
+                            <div class="yesno-options">
+                                <div class="yesno-option">
+                                    <input type="radio" name="on_time" value="Yes" id="onTimeYes">
+                                    <label for="onTimeYes">Yes</label>
                                 </div>
-                                <div class="select-items" id="selectItems">
-                                    <div class="select-item" data-value="Excellent">
-                                        <span class="item-number">1</span>
-                                        <span class="item-emoji">🌟</span>
-                                        <span class="item-text">Excellent – Very professional and satisfied with the tutor and service</span>
-                                    </div>
-                                    <div class="select-item" data-value="Good">
-                                        <span class="item-number">2</span>
-                                        <span class="item-emoji">👍</span>
-                                        <span class="item-text">Good – Satisfied, but there's some room for improvement</span>
-                                    </div>
-                                    <div class="select-item" data-value="Average">
-                                        <span class="item-number">3</span>
-                                        <span class="item-emoji">😐</span>
-                                        <span class="item-text">Average – It was okay, not great or poor</span>
-                                    </div>
-                                    <div class="select-item" data-value="Poor">
-                                        <span class="item-number">4</span>
-                                        <span class="item-emoji">👎</span>
-                                        <span class="item-text">Poor – Not satisfied with the tutor or service</span>
-                                    </div>
-                                    <div class="select-item" data-value="Very Poor">
-                                        <span class="item-number">5</span>
-                                        <span class="item-emoji">😡</span>
-                                        <span class="item-text">Very Poor – Extremely dissatisfied with the experience</span>
-                                    </div>
+                                <div class="yesno-option">
+                                    <input type="radio" name="on_time" value="No" id="onTimeNo">
+                                    <label for="onTimeNo">No</label>
                                 </div>
                             </div>
-                            <input type="hidden" name="service" id="serviceInput" value="">
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <div class="form-section">
+                            <div class="section-title">Rate Teaching style and method</div>
+                            <div class="stars">
+                                <input type="radio" name="teaching_rating" value="5" id="tr5"><label for="tr5"></label>
+                                <input type="radio" name="teaching_rating" value="4" id="tr4"><label for="tr4"></label>
+                                <input type="radio" name="teaching_rating" value="3" id="tr3"><label for="tr3"></label>
+                                <input type="radio" name="teaching_rating" value="2" id="tr2"><label for="tr2"></label>
+                                <input type="radio" name="teaching_rating" value="1" id="tr1"><label for="tr1"></label>
+                            </div>
+                            <div class="rating-value" id="teaching_rating-value"></div>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <div class="form-section">
+                            <div class="section-title">Choose one option</div>
+                            <div class="checkbox-options">
+                                <div class="checkbox-option">
+                                    <input type="radio" name="demo_decision" value="Satisfied we want to Hire Tutor" id="opt1">
+                                    <label for="opt1"><span class="checkmark"></span>Satisfied we want to Hire Tutor</label>
+                                </div>
+                                <div class="checkbox-option">
+                                    <input type="radio" name="demo_decision" value="We need 2nd demo class with same tutor" id="opt2">
+                                    <label for="opt2"><span class="checkmark"></span>We need 2nd demo class with same tutor</label>
+                                </div>
+                                <div class="checkbox-option">
+                                    <input type="radio" name="demo_decision" value="Not Satisfied, please send other Tutor for demo class" id="opt3">
+                                    <label for="opt3"><span class="checkmark"></span>Not Satisfied, please send other Tutor for demo class</label>
+                                </div>
+                                <div class="checkbox-option">
+                                    <input type="radio" name="demo_decision" value="We Hired tutor from other Academy" id="opt4">
+                                    <label for="opt4"><span class="checkmark"></span>We Hired tutor from other Academy</label>
+                                </div>
+                                <div class="checkbox-option">
+                                    <input type="radio" name="demo_decision" value="Need Academy support to negotiate fee with Tutor" id="opt5">
+                                    <label for="opt5"><span class="checkmark"></span>Need Academy support to negotiate fee with Tutor</label>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="divider"></div>
+                    <!-- ========== TUITION FORM FIELDS ========== -->
+                    <div class="tuition-only">
+                        <div class="form-section">
+                            <div class="section-title">Your Email</div>
+                            <input type="email" name="email" placeholder="Enter your email address">
+                        </div>
 
-                    <div class="form-section">
-                        <div class="section-title">Would you recommend KEEP TUTORS?</div>
-                        <div class="recommend-options">
-                            <div class="recommend-option">
-                                <input type="radio" name="recommend" value="Yes" id="rYes"><label for="rYes">Yes</label>
+                        <div class="divider"></div>
+
+                        <div class="form-section">
+                            <div class="section-title" id="tutorSectionTitle">Rate the Tutor</div>
+
+                            <div class="rating-group">
+                                <label class="rating-label">Punctuality</label>
+                                <div class="stars">
+                                    <input type="radio" name="punctuality" value="5" id="p5"><label for="p5"></label>
+                                    <input type="radio" name="punctuality" value="4" id="p4"><label for="p4"></label>
+                                    <input type="radio" name="punctuality" value="3" id="p3"><label for="p3"></label>
+                                    <input type="radio" name="punctuality" value="2" id="p2"><label for="p2"></label>
+                                    <input type="radio" name="punctuality" value="1" id="p1"><label for="p1"></label>
+                                </div>
+                                <div class="rating-value" id="punctuality-value"></div>
                             </div>
-                            <div class="recommend-option">
-                                <input type="radio" name="recommend" value="Maybe" id="rMaybe"><label for="rMaybe">Maybe</label>
+
+                            <div class="rating-group">
+                                <label class="rating-label">Teaching Quality</label>
+                                <div class="stars">
+                                    <input type="radio" name="teaching" value="5" id="t5"><label for="t5"></label>
+                                    <input type="radio" name="teaching" value="4" id="t4"><label for="t4"></label>
+                                    <input type="radio" name="teaching" value="3" id="t3"><label for="t3"></label>
+                                    <input type="radio" name="teaching" value="2" id="t2"><label for="t2"></label>
+                                    <input type="radio" name="teaching" value="1" id="t1"><label for="t1"></label>
+                                </div>
+                                <div class="rating-value" id="teaching-value"></div>
                             </div>
-                            <div class="recommend-option">
-                                <input type="radio" name="recommend" value="No" id="rNo"><label for="rNo">No</label>
+
+                            <div class="rating-group">
+                                <label class="rating-label">Communication</label>
+                                <div class="stars">
+                                    <input type="radio" name="communication" value="5" id="c5"><label for="c5"></label>
+                                    <input type="radio" name="communication" value="4" id="c4"><label for="c4"></label>
+                                    <input type="radio" name="communication" value="3" id="c3"><label for="c3"></label>
+                                    <input type="radio" name="communication" value="2" id="c2"><label for="c2"></label>
+                                    <input type="radio" name="communication" value="1" id="c1"><label for="c1"></label>
+                                </div>
+                                <div class="rating-value" id="communication-value"></div>
+                            </div>
+
+                            <div class="rating-group">
+                                <label class="rating-label">Subject Knowledge</label>
+                                <div class="stars">
+                                    <input type="radio" name="knowledge" value="5" id="k5"><label for="k5"></label>
+                                    <input type="radio" name="knowledge" value="4" id="k4"><label for="k4"></label>
+                                    <input type="radio" name="knowledge" value="3" id="k3"><label for="k3"></label>
+                                    <input type="radio" name="knowledge" value="2" id="k2"><label for="k2"></label>
+                                    <input type="radio" name="knowledge" value="1" id="k1"><label for="k1"></label>
+                                </div>
+                                <div class="rating-value" id="knowledge-value"></div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="divider"></div>
+                        <div class="divider"></div>
 
-                    <div class="form-section">
-                        <div class="section-title">Additional Comments</div>
-                        <textarea name="comments" placeholder="Share any additional feedback about your experience..."></textarea>
-                    </div>
+                        <div class="form-section">
+                            <div class="section-title">How satisfied are you with KEEP TUTORS?</div>
+                            <div class="dropdown-group">
+                                <label class="rating-label">Overall Service Experience</label>
+                                <div class="custom-select">
+                                    <div class="select-selected" id="selectedOption">
+                                        <span class="placeholder">Select your satisfaction level</span>
+                                    </div>
+                                    <div class="select-items" id="selectItems">
+                                        <div class="select-item" data-value="Excellent">
+                                            <span class="item-number">1</span>
+                                            <span class="item-emoji">🌟</span>
+                                            <span class="item-text">Excellent – Very professional and satisfied with the tutor and service</span>
+                                        </div>
+                                        <div class="select-item" data-value="Good">
+                                            <span class="item-number">2</span>
+                                            <span class="item-emoji">👍</span>
+                                            <span class="item-text">Good – Satisfied, but there's some room for improvement</span>
+                                        </div>
+                                        <div class="select-item" data-value="Average">
+                                            <span class="item-number">3</span>
+                                            <span class="item-emoji">😐</span>
+                                            <span class="item-text">Average – It was okay, not great or poor</span>
+                                        </div>
+                                        <div class="select-item" data-value="Poor">
+                                            <span class="item-number">4</span>
+                                            <span class="item-emoji">👎</span>
+                                            <span class="item-text">Poor – Not satisfied with the tutor or service</span>
+                                        </div>
+                                        <div class="select-item" data-value="Very Poor">
+                                            <span class="item-number">5</span>
+                                            <span class="item-emoji">😡</span>
+                                            <span class="item-text">Very Poor – Extremely dissatisfied with the experience</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="service" id="serviceInput" value="">
+                            </div>
+                        </div>
 
-                    <div class="form-section">
-                        <div class="section-title">Suggestions for Improvement</div>
-                        <textarea name="suggestions" placeholder="How can we improve our service?"></textarea>
+                        <div class="divider"></div>
+
+                        <div class="form-section">
+                            <div class="section-title">Would you recommend KEEP TUTORS?</div>
+                            <div class="recommend-options">
+                                <div class="recommend-option">
+                                    <input type="radio" name="recommend" value="Yes" id="rYes"><label for="rYes">Yes</label>
+                                </div>
+                                <div class="recommend-option">
+                                    <input type="radio" name="recommend" value="Maybe" id="rMaybe"><label for="rMaybe">Maybe</label>
+                                </div>
+                                <div class="recommend-option">
+                                    <input type="radio" name="recommend" value="No" id="rNo"><label for="rNo">No</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="divider"></div>
+
+                        <div class="form-section">
+                            <div class="section-title">Additional Comments</div>
+                            <textarea name="comments" placeholder="Share any additional feedback about your experience..."></textarea>
+                        </div>
+
+                        <div class="form-section">
+                            <div class="section-title">Suggestions for Improvement</div>
+                            <textarea name="suggestions" placeholder="How can we improve our service?"></textarea>
+                        </div>
                     </div>
 
                     <button type="submit" class="submit-btn">Submit Feedback</button>
@@ -334,11 +421,14 @@
         const formTitle = document.getElementById('formTitle');
         const tutorSectionTitle = document.getElementById('tutorSectionTitle');
         const tutorNameDisplay = document.getElementById('tutorNameDisplay');
+        const tutorNameInput = document.getElementById('tutorNameInput');
+        const mainCard = document.getElementById('mainCard');
         const selectSelected = document.getElementById('selectedOption');
         const selectItems = document.getElementById('selectItems');
         const serviceInput = document.getElementById('serviceInput');
 
         let recordId = null;
+        let feedbackType = 'Tuition';
 
         async function initPage() {
             if (!feedbackId) {
@@ -361,22 +451,26 @@
                 }
 
                 recordId = result.recordId;
-                const feedbackType = result.type;
+                feedbackType = result.type || 'Tuition';
                 const tutorName = result.tutorName;
                 
-                // Display tutor name if available
-                if (tutorName) {
-                    tutorNameDisplay.textContent = `Tutor: ${tutorName}`;
-                }
-                
+                // Set form type class for showing/hiding sections
                 if (feedbackType === 'Demo') {
-                    formTitle.textContent = 'Demo Feedback';
-                    tutorSectionTitle.textContent = 'Rate the Demo Session';
+                    mainCard.classList.add('form-type-demo');
+                    formTitle.textContent = 'Demo/Trial Class Feedback';
                     document.title = 'Demo Feedback - KEEP TUTORS';
+                    // Pre-fill tutor name if available
+                    if (tutorName && tutorNameInput) {
+                        tutorNameInput.value = tutorName;
+                    }
                 } else {
+                    mainCard.classList.add('form-type-tuition');
                     formTitle.textContent = 'Tuition Feedback';
-                    tutorSectionTitle.textContent = 'Rate the Tutor';
                     document.title = 'Tuition Feedback - KEEP TUTORS';
+                    // Display tutor name if available
+                    if (tutorName) {
+                        tutorNameDisplay.textContent = `Tutor: ${tutorName}`;
+                    }
                 }
 
                 showFormState();
@@ -390,6 +484,7 @@
         function showFormState() { loadingState.classList.remove('active'); formState.classList.add('active'); }
         function showError(msg) { errorMessage.textContent = msg; errorMessage.classList.add('active'); window.scrollTo({ top: 0, behavior: 'smooth' }); }
 
+        // Star rating display
         document.querySelectorAll('.stars input').forEach(input => {
             input.addEventListener('change', (e) => {
                 const name = e.target.name;
@@ -399,6 +494,7 @@
             });
         });
 
+        // Service dropdown (for tuition form)
         const serviceOptions = { 
             'Excellent': { emoji: '🌟', text: 'Excellent – Very professional and satisfied with the tutor and service' },
             'Good': { emoji: '👍', text: 'Good – Satisfied, but there\'s some room for improvement' },
@@ -407,11 +503,13 @@
             'Very Poor': { emoji: '😡', text: 'Very Poor – Extremely dissatisfied with the experience' }
         };
 
-        selectSelected.addEventListener('click', (e) => {
-            e.stopPropagation();
-            selectSelected.classList.toggle('active');
-            selectItems.classList.toggle('show');
-        });
+        if (selectSelected) {
+            selectSelected.addEventListener('click', (e) => {
+                e.stopPropagation();
+                selectSelected.classList.toggle('active');
+                selectItems.classList.toggle('show');
+            });
+        }
 
         document.querySelectorAll('.select-item').forEach(item => {
             item.addEventListener('click', () => {
@@ -426,31 +524,63 @@
             });
         });
 
-        document.addEventListener('click', () => { selectSelected.classList.remove('active'); selectItems.classList.remove('show'); });
+        document.addEventListener('click', () => { 
+            if (selectSelected) {
+                selectSelected.classList.remove('active'); 
+                selectItems.classList.remove('show'); 
+            }
+        });
 
+        // Form submission
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             const formData = new FormData(form);
-            const email = formData.get('email')?.trim();
 
-            const data = {
+            let data = {
                 id: feedbackId,
                 recordId: recordId,
-                email: email,
-                punctuality: formData.get('punctuality'),
-                teaching_quality: formData.get('teaching'),
-                communication: formData.get('communication'),
-                subject_knowledge: formData.get('knowledge'),
-                service_satisfaction: serviceInput.value,
-                would_recommend: formData.get('recommend'),
-                comments: formData.get('comments') || '',
-                suggestions: formData.get('suggestions') || ''
+                type: feedbackType
             };
 
-            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showError('Please enter a valid email address.'); return; }
-            if (!data.punctuality || !data.teaching_quality || !data.communication || !data.subject_knowledge) { showError('Please complete all tutor rating fields.'); return; }
-            if (!data.service_satisfaction) { showError('Please select your satisfaction level with KEEP TUTORS.'); return; }
-            if (!data.would_recommend) { showError('Please select whether you would recommend us.'); return; }
+            // Different validation based on form type
+            if (feedbackType === 'Demo') {
+                // Demo form validation
+                const tutorName = formData.get('tutor_name')?.trim();
+                const onTime = formData.get('on_time');
+                const teachingRating = formData.get('teaching_rating');
+                const demoDecision = formData.get('demo_decision');
+
+                if (!tutorName) { showError('Please enter the tutor name.'); return; }
+                if (!onTime) { showError('Please select if the tutor reached on time.'); return; }
+                if (!teachingRating) { showError('Please rate the teaching style and method.'); return; }
+                if (!demoDecision) { showError('Please choose one option.'); return; }
+
+                data.tutor_name = tutorName;
+                data.on_time = onTime;
+                data.teaching_rating = teachingRating;
+                data.demo_decision = demoDecision;
+
+            } else {
+                // Tuition form validation
+                const email = formData.get('email')?.trim();
+
+                if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showError('Please enter a valid email address.'); return; }
+                if (!formData.get('punctuality') || !formData.get('teaching') || !formData.get('communication') || !formData.get('knowledge')) { 
+                    showError('Please complete all tutor rating fields.'); return; 
+                }
+                if (!serviceInput.value) { showError('Please select your satisfaction level with KEEP TUTORS.'); return; }
+                if (!formData.get('recommend')) { showError('Please select whether you would recommend us.'); return; }
+
+                data.email = email;
+                data.punctuality = formData.get('punctuality');
+                data.teaching_quality = formData.get('teaching');
+                data.communication = formData.get('communication');
+                data.subject_knowledge = formData.get('knowledge');
+                data.service_satisfaction = serviceInput.value;
+                data.would_recommend = formData.get('recommend');
+                data.comments = formData.get('comments') || '';
+                data.suggestions = formData.get('suggestions') || '';
+            }
 
             errorMessage.classList.remove('active');
             form.parentElement.classList.add('loading');
