@@ -457,11 +457,14 @@
                 // Set form type class for showing/hiding sections
                 if (feedbackType === 'Demo') {
                     mainCard.classList.add('form-type-demo');
-                    formTitle.textContent = 'Demo/Trial Class Feedback';
+                    formTitle.textContent = 'Demo Tuition Feedback';
                     document.title = 'Demo Feedback - KEEP TUTORS';
-                    // Pre-fill tutor name if available
+                    // Pre-fill tutor name if available (read-only)
                     if (tutorName && tutorNameInput) {
-                        tutorNameInput.value = tutorName;
+                        tutorNameInput.value = Array.isArray(tutorName) ? tutorName[0] : tutorName;
+                        tutorNameInput.readOnly = true;
+                        tutorNameInput.style.backgroundColor = '#f5f5f5';
+                        tutorNameInput.style.cursor = 'not-allowed';
                     }
                 } else {
                     mainCard.classList.add('form-type-tuition');
