@@ -417,6 +417,7 @@
         const ratingLabels = { 1: 'Poor', 2: 'Fair', 3: 'Good', 4: 'Very Good', 5: 'Excellent' };
         const urlParams = new URLSearchParams(window.location.search);
         const feedbackId = urlParams.get('id');
+        const feedbackTypeParam = urlParams.get('type'); // 'demo' or 'tuition'
 
         const loadingState = document.getElementById('loadingState');
         const formState = document.getElementById('formState');
@@ -443,8 +444,13 @@
                 return;
             }
 
+            if (!feedbackTypeParam || !['demo', 'tuition'].includes(feedbackTypeParam.toLowerCase())) {
+                showInvalidState('Invalid link. Missing type parameter.');
+                return;
+            }
+
             try {
-                const response = await fetch(`/api/feedback?id=${feedbackId}`);
+                const response = await fetch(`/api/feedback?id=${feedbackId}&type=${feedbackTypeParam}`);
                 const result = await response.json();
 
                 if (!response.ok) {
