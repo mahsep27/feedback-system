@@ -54,7 +54,7 @@ export default async function handler(req, res) {
                 recordId: record.id,
                 type: record.fields['Feedback Type'] || 'Tuition',
                 status: record.fields['Status'] || 'Pending',
-                tutorName: record.fields['Tutor Name Rollup (from Applicants)'] || ''
+                tutorName: record.fields['Tutor Name'] || ''
             });
 
         } catch (error) {
