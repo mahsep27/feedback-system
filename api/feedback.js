@@ -120,8 +120,7 @@ export default async function handler(req, res) {
                     subject_knowledge,
                     service_satisfaction,
                     would_recommend,
-                    comments,
-                    suggestions
+                    comments
                 } = body;
 
                 if (!email) {
@@ -149,7 +148,6 @@ export default async function handler(req, res) {
                 airtableRecord.fields["Service Satisfaction"] = serviceSatisfactionMap[service_satisfaction] || service_satisfaction;
                 airtableRecord.fields["Would Recommend"] = would_recommend;
                 airtableRecord.fields["Comments"] = comments || "";
-                airtableRecord.fields["Suggestions"] = suggestions || "";
             }
 
             console.log('Sending to Airtable:', JSON.stringify(airtableRecord, null, 2));
